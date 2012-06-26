@@ -216,7 +216,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
     
 	xmppStream = [[XMPPStream alloc] init];
 	
-#if !TARGET_IPHONE_SIMULATOR
+//#if !TARGET_IPHONE_SIMULATOR
 	{
 		// Want xmpp to run in the background?
 		// 
@@ -230,7 +230,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
 		
 		xmppStream.enableBackgroundingOnSocket = YES;
 	}
-#endif
+//#endif
 	
 	// Setup reconnect
 	// 
@@ -598,6 +598,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
     }
 }
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark XMPPRosterDelegate
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -644,6 +645,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
 	}
 	
 }
+
 
 -(NSString*)accountName
 {
