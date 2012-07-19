@@ -17,7 +17,7 @@
 #import "OTRSettingsManager.h"
 #import "DDLog.h"
 #import "OTRUIKeyboardListener.h"
-
+#import "Appirater.h"
 
 // Log levels: off, error, warn, info, verbose
 #if DEBUG
@@ -99,6 +99,8 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
     
     application.applicationIconBadgeNumber = 0;
     [OTRUIKeyboardListener shared];
+  
+    [Appirater appLaunched:YES];
     
     return YES;
 }
@@ -162,7 +164,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-
+    [Appirater appEnteredForeground:YES];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -192,7 +194,17 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
      Save data if appropriate.
      See also applicationDidEnterBackground:.
      */
+    
+    
     OTRProtocolManager *protocolManager = [OTRProtocolManager sharedInstance];
+    
+    for(id key in protocolManager.protocolManagers)
+    {
+        id <OTRProtocol> protocol = [protocolManager.protocolManagers objectForKey:key];
+        [protocol disconnect];
+    }
+    
+    /*
     NSPersistentStoreCoordinator *storeCoordinator = [protocolManager.xmppManager.xmppRosterStorage
  persistentStoreCoordinator];
      NSArray *stores = [storeCoordinator persistentStores];
@@ -209,6 +221,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
      if(error2)
      NSLog(@"%@",[error2 description]);
      }
+     */
 }
 
 /*
