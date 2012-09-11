@@ -5,11 +5,27 @@
 //  Created by Chris Ballinger on 8/12/11.
 //  Copyright (c) 2011 Chris Ballinger. All rights reserved.
 //
+//  This file is part of ChatSecure.
+//
+//  ChatSecure is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  ChatSecure is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with ChatSecure.  If not, see <http://www.gnu.org/licenses/>.
 
 #import "OTRLoginViewController.h"
 #import "Strings.h"
 #import "OTRUIKeyboardListener.h"
 #import "OTRConstants.h"
+#import "OTRXMPPAccount.h"
+#import "OTRAppDelegate.h"
 
 #define kFieldBuffer 20;
 
@@ -24,6 +40,9 @@
 @synthesize account;
 @synthesize domainLabel,domainTextField;
 @synthesize facebookInfoButton;
+@synthesize isNewAccount;
+@synthesize basicAdvancedSegmentedControl;
+@synthesize sslMismatchLabel,sslMismatchSwitch,selfSignedLabel,selfSignedSwitch;
 
 - (void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kOTRProtocolLoginFail object:nil];
@@ -42,6 +61,11 @@
     self.account = nil;
     self.domainTextField = nil;
     self.domainLabel = nil;
+    self.basicAdvancedSegmentedControl = nil;
+    self.selfSignedLabel = nil;
+    self.selfSignedSwitch = nil;
+    self.sslMismatchLabel = nil;
+    self.sslMismatchSwitch = nil;
 }
 
 - (id) initWithAccount:(OTRAccount*)newAccount {
@@ -77,30 +101,73 @@
     self.usernameTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.usernameTextField.text = account.username;
     
-    if ([account.domain isEqualToString:kOTRGoogleTalkDomain]) {
-        self.usernameTextField.placeholder = @"user@gmail.com";
+    
+    if ([account isKindOfClass:[OTRXMPPAccount class]]) {
+        OTRXMPPAccount *xmppAccount = (OTRXMPPAccount*) account;
+        if ([xmppAccount.domain isEqualToString:kOTRGoogleTalkDomain]) {
+            self.usernameTextField.placeholder = @"user@gmail.com";
+        }
+        else if ([xmppAccount.domain isEqualToString:kOTRFacebookDomain])
+        {
+            facebookHelpLabel = [[UILabel alloc] init];
+            facebookHelpLabel.text = FACEBOOK_HELP_STRING;
+            facebookHelpLabel.textAlignment = UITextAlignmentLeft;
+            facebookHelpLabel.lineBreakMode = UILineBreakModeWordWrap;
+            facebookHelpLabel.numberOfLines = 0;
+            facebookHelpLabel.font = [UIFont systemFontOfSize:14];
+            
+            self.facebookInfoButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
+            [self.facebookInfoButton addTarget:self action:@selector(facebookInfoButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            
+            [self.view addSubview:facebookHelpLabel];
+            [self.view addSubview:facebookInfoButton];
+            
+            self.usernameTextField.placeholder = @"";
+        }
+        else if ([account.protocol isEqualToString:kOTRProtocolTypeXMPP] && ![xmppAccount.domain isEqualToString:kOTRGoogleTalkDomain])  //Jabber domain fields
+        {
+            self.usernameTextField.placeholder = @"user@example.com";
+
+            self.domainLabel = [[UILabel alloc] init];
+            self.domainLabel.text = DOMAIN_STRING;
+            
+            [self.view addSubview:domainLabel];
+            
+            self.domainTextField = [[UITextField alloc] init];
+            self.domainTextField.delegate = self;
+            self.domainTextField.autocorrectionType = UITextAutocorrectionTypeNo;
+            self.domainTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            self.domainTextField.borderStyle = UITextBorderStyleRoundedRect;
+            self.domainTextField.placeholder = OPTIONAL_STRING;
+            [self.view addSubview:domainTextField];
+            
+            self.basicAdvancedSegmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:BASIC_STRING,ADVANCED_STRING, nil]];
+            [self.basicAdvancedSegmentedControl addTarget:self action:@selector(segmentedControlChanged) forControlEvents:UIControlEventValueChanged];
+            self.basicAdvancedSegmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
+            self.basicAdvancedSegmentedControl.selectedSegmentIndex = 0;
+            
+            self.sslMismatchLabel = [[UILabel alloc]init];
+            self.sslMismatchLabel.text = SSL_MISMATCH_STRING;
+            [self.view addSubview:sslMismatchLabel];
+            
+            self.sslMismatchSwitch = [[UISwitch alloc]init];
+            [self.view addSubview:sslMismatchSwitch];
+            
+            self.selfSignedLabel = [[UILabel alloc]init];
+            self.selfSignedLabel.text = SELF_SIGNED_SSL_STRING;
+            [self.view addSubview:selfSignedLabel];
+            
+            self.selfSignedSwitch = [[UISwitch alloc]init];
+            [self.view addSubview:selfSignedSwitch];
+            
+            
+            [self.view addSubview:basicAdvancedSegmentedControl];
+            
+        }
     }
-    else if ([account.domain isEqualToString:kOTRFacebookDomain])
-    {
-        facebookHelpLabel = [[UILabel alloc] init];
-        facebookHelpLabel.text = FACEBOOK_HELP_STRING;
-        facebookHelpLabel.textAlignment = UITextAlignmentLeft;
-        facebookHelpLabel.lineBreakMode = UILineBreakModeWordWrap;
-        facebookHelpLabel.numberOfLines = 0;
-        facebookHelpLabel.font = [UIFont systemFontOfSize:14];
-        
-        self.facebookInfoButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
-        [self.facebookInfoButton addTarget:self action:@selector(facebookInfoButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        
-        [self.view addSubview:facebookHelpLabel];
-        [self.view addSubview:facebookInfoButton];
-        
-        self.usernameTextField.placeholder = @"";
-    }
-    else if ([account.protocol isEqualToString:kOTRProtocolTypeXMPP])
-    {
-        self.usernameTextField.placeholder = @"user@example.com";
-    }
+    
+
+    
     self.passwordTextField = [[UITextField alloc] init];
     self.passwordTextField.delegate = self;
     self.passwordTextField.borderStyle = UITextBorderStyleRoundedRect;
@@ -112,33 +179,19 @@
     [self.view addSubview:passwordTextField];
     
     
-    //Jabber domain fields
-    if([account.domain isEqualToString:@""] && [account.protocol isEqualToString:kOTRProtocolTypeXMPP])
-    {
-        self.domainLabel = [[UILabel alloc] init];
-        self.domainLabel.text = DOMAIN_STRING;
-        
-        [self.view addSubview:domainLabel];
-        
-        self.domainTextField = [[UITextField alloc] init];
-        self.domainTextField.delegate = self;
-        self.domainTextField.autocorrectionType = UITextAutocorrectionTypeNo;
-        self.domainTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        self.domainTextField.borderStyle = UITextBorderStyleRoundedRect;
-        self.domainTextField.placeholder = OPTIONAL_STRING;
-        
-        [self.view addSubview:domainTextField];
-        
-    }
+
     
     NSString *loginButtonString = LOGIN_STRING;
     self.title = [account providerName];
     
     self.loginButton = [[UIBarButtonItem alloc] initWithTitle:loginButtonString style:UIBarButtonItemStyleDone target:self action:@selector(loginButtonPressed:)];
-    self.cancelButton = [[UIBarButtonItem alloc] initWithTitle:CANCEL_STRING style:UIBarButtonItemStyleBordered target:self action:@selector(cancelPressed:)];
-    
     self.navigationItem.rightBarButtonItem = loginButton;
-    self.navigationItem.leftBarButtonItem = cancelButton;
+
+    if (!isNewAccount) {
+        self.cancelButton = [[UIBarButtonItem alloc] initWithTitle:CANCEL_STRING style:UIBarButtonItemStyleBordered target:self action:@selector(cancelPressed:)];
+        self.navigationItem.leftBarButtonItem = cancelButton;
+
+    }
 }
 
 - (void) viewDidLoad 
@@ -180,6 +233,11 @@
     //self.logoView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
     padding.frame = CGRectMake(0, 0, self.view.frame.size.width, 30);
     
+    if (self.basicAdvancedSegmentedControl) {
+        self.basicAdvancedSegmentedControl.frame = CGRectMake(1, 1, 200, 28);
+        self.basicAdvancedSegmentedControl.center = CGPointMake(self.view.center.x, self.basicAdvancedSegmentedControl.center.y);
+        //padding.frame = CGRectMake(0, 0, self.view.frame.size.width, 32)
+    }
     
     CGFloat usernameLabelFrameYOrigin = padding.frame.origin.y + padding.frame.size.height;
     CGSize usernameLabelTextSize = [self textSizeForLabel:usernameLabel];
@@ -198,18 +256,50 @@
     self.usernameTextField.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
     
     CGFloat passwordLabelFrameYOrigin;
-    if(self.domainLabel && self.domainTextField)
+    if(self.domainLabel && self.domainTextField && self.basicAdvancedSegmentedControl)
     {
-        CGFloat domainLabelFrameYOrigin = usernameLabelFrameYOrigin + self.usernameLabel.frame.size.height +kFieldBuffer;
-        self.domainLabel.frame = CGRectMake(10, domainLabelFrameYOrigin, labelWidth, 21);
+        //CGFloat domainLabelFrameYOrigin = usernameLabelFrameYOrigin + self.usernameLabel.frame.size.height +kFieldBuffer;
+        self.domainLabel.frame = CGRectMake(10, usernameLabelFrameYOrigin, labelWidth, 21);
         self.domainLabel.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
+        [self.domainLabel setHidden:YES];
         
         self.domainTextField.frame = [self textFieldFrameForLabel:domainLabel];
         self.domainTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
-        self.domainTextField.returnKeyType = UIReturnKeyNext;
+        self.domainTextField.keyboardType = UIKeyboardTypeURL;
+        self.domainTextField.returnKeyType = UIReturnKeyGo;
         self.domainTextField.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
+        [self.domainTextField setHidden:YES];
         
-        passwordLabelFrameYOrigin = domainLabelFrameYOrigin + self.domainLabel.frame.size.height +kFieldBuffer;
+        CGFloat sslMismatchLabelFrameYOrigin = domainLabel.frame.origin.y + domainLabel.frame.size.height + kFieldBuffer;
+        self.sslMismatchLabel.frame = CGRectMake(10, sslMismatchLabelFrameYOrigin, 200, 21);
+        self.sslMismatchLabel.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
+        [self.sslMismatchLabel setHidden:YES];
+        
+        
+        CGFloat sslMismatchSwitchFrameWidth = 79;
+        self.sslMismatchSwitch.frame = CGRectMake(self.view.frame.size.width-sslMismatchSwitchFrameWidth-5, sslMismatchLabelFrameYOrigin, sslMismatchSwitchFrameWidth, 27);
+        self.sslMismatchSwitch.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
+        [self.sslMismatchSwitch setHidden:YES];
+        
+        
+        CGFloat selfSignedFrameYOrigin = sslMismatchLabel.frame.origin.y + sslMismatchLabel.frame.size.height + kFieldBuffer;
+        self.selfSignedLabel.frame = CGRectMake(10, selfSignedFrameYOrigin, 180, 21);
+        self.selfSignedLabel.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
+        [self.selfSignedLabel setHidden:YES];
+        
+        
+        CGFloat selfSignedSwitchFrameWidth = 79;
+        self.selfSignedSwitch.frame = CGRectMake(self.view.frame.size.width-selfSignedSwitchFrameWidth-5, selfSignedFrameYOrigin, selfSignedSwitchFrameWidth, 27);
+        self.selfSignedSwitch.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
+        [self.selfSignedSwitch setHidden:YES];
+        
+        self.domainTextField.text = ((OTRXMPPAccount*)self.account).domain;
+        self.sslMismatchSwitch.on = ((OTRXMPPAccount*)self.account).allowSSLHostNameMismatch;
+        self.selfSignedSwitch.on = ((OTRXMPPAccount*)self.account).allowSelfSignedSSL;
+        
+        
+        //passwordLabelFrameYOrigin = domainLabelFrameYOrigin + self.domainLabel.frame.size.height +kFieldBuffer;
+        passwordLabelFrameYOrigin = usernameLabelFrameYOrigin + self.usernameLabel.frame.size.height + kFieldBuffer;
         
     }
     else if (facebookHelpLabel)
@@ -232,7 +322,7 @@
         facebookHelpLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
         
         CGSize infoButtonSize = self.facebookInfoButton.frame.size;
-        CGFloat facebookInfoButtonFrameYOrigin = facebookHelpLabeFrameYOrigin + (expectedLabelSize.height - infoButtonSize.height)/2;
+        CGFloat facebookInfoButtonFrameYOrigin = floorf(facebookHelpLabeFrameYOrigin + (expectedLabelSize.height - infoButtonSize.height)/2);
         
         self.facebookInfoButton.frame = CGRectMake(facebookHelpLabel.frame.origin.x + facebookHelpLabel.frame.size.width, facebookInfoButtonFrameYOrigin, infoButtonSize.width, infoButtonSize.height);
         
@@ -275,10 +365,60 @@
     }
 }
 
+-(void) segmentedControlChanged
+{
+    //baseic setup
+    if([basicAdvancedSegmentedControl selectedSegmentIndex]==0)
+    {
+        [self.domainLabel setHidden:YES];
+        [self.domainTextField setHidden:YES];
+        [self.usernameTextField becomeFirstResponder];
+        [self.sslMismatchSwitch setHidden:YES];
+        [self.sslMismatchLabel setHidden:YES];
+        [self.selfSignedLabel setHidden:YES];
+        [self.selfSignedSwitch setHidden:YES];
+        
+        
+        [self.usernameLabel setHidden:NO];
+        [self.usernameTextField setHidden:NO];
+        [self.rememberPasswordLabel setHidden:NO];
+        [self.rememberPasswordSwitch setHidden:NO];
+        [self.passwordLabel setHidden:NO];
+        [self.passwordTextField setHidden:NO];
+        
+    }
+    else //advanced setup
+    {
+        [self.domainLabel setHidden:NO];
+        [self.domainTextField setHidden:NO];
+        [self.domainTextField becomeFirstResponder];
+        [self.sslMismatchSwitch setHidden:NO];
+        [self.sslMismatchLabel setHidden:NO];
+        [self.selfSignedLabel setHidden:NO];
+        [self.selfSignedSwitch setHidden:NO];
+        
+        
+        [self.usernameLabel setHidden:YES];
+        [self.usernameTextField setHidden:YES];
+        [self.rememberPasswordLabel setHidden:YES];
+        [self.rememberPasswordSwitch setHidden:YES];
+        [self.passwordLabel setHidden:YES];
+        [self.passwordTextField setHidden:YES];
+    }
+    
+}
+
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     account.username = self.usernameTextField.text;
     account.rememberPassword = rememberPasswordSwitch.on;
+    
+    if([account isKindOfClass:[OTRXMPPAccount class]])
+    {
+        ((OTRXMPPAccount *)account).allowSelfSignedSSL = selfSignedSwitch.on;
+        ((OTRXMPPAccount *)account).allowSSLHostNameMismatch = sslMismatchSwitch.on;
+    }
+    
     
     if (account.rememberPassword) {
         account.password = self.passwordTextField.text;
@@ -364,18 +504,24 @@
         NSString * usernameText = [usernameTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         NSString * domainText = [domainTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         
-        if([self.account.domain isEqualToString:kOTRFacebookDomain])
-        {
-            usernameText = [NSString stringWithFormat:@"%@@%@",usernameText,kOTRFacebookDomain];
+        if ([account isKindOfClass:[OTRXMPPAccount class]]) {
+            OTRXMPPAccount *xmppAccount = (OTRXMPPAccount*) account;
+            if([xmppAccount.domain isEqualToString:kOTRFacebookDomain])
+            {
+                usernameText = [NSString stringWithFormat:@"%@@%@",usernameText,kOTRFacebookDomain];
+            }
+            if([domainText length])
+            {
+                xmppAccount.domain = domainText;
+            }
         }
+
+
         
         self.account.username = usernameText;
         self.account.password = passwordTextField.text;
         
-        if([domainText length])
-        {
-            self.account.domain = domainText;
-        }
+
         
         id<OTRProtocol> protocol = [[OTRProtocolManager sharedInstance] protocolForAccount:self.account];
         [protocol connectWithPassword:self.passwordTextField.text];
@@ -404,9 +550,7 @@
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if (self.usernameTextField.isFirstResponder && self.domainTextField)
-        [self.domainTextField becomeFirstResponder];
-    else if (self.usernameTextField.isFirstResponder) {
+    if (self.usernameTextField.isFirstResponder) {
         [self.passwordTextField becomeFirstResponder];
     }
     else if (self.domainTextField.isFirstResponder) {
@@ -432,7 +576,7 @@
 -(void)facebookInfoButtonPressed:(id)sender
 {
     UIActionSheet * urlActionSheet = [[UIActionSheet alloc] initWithTitle:kOTRFacebookUsernameLink delegate:self cancelButtonTitle:CANCEL_STRING destructiveButtonTitle:nil otherButtonTitles:OPEN_IN_SAFARI_STRING, nil];
-    [urlActionSheet showInView:self.view];
+    [urlActionSheet showInView:[OTR_APP_DELEGATE window]];
 }
 
 

@@ -5,58 +5,51 @@
 //  Created by Chris Ballinger on 9/4/11.
 //  Copyright (c) 2011 Chris Ballinger. All rights reserved.
 //
+//  This file is part of ChatSecure.
+//
+//  ChatSecure is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  ChatSecure is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with ChatSecure.  If not, see <http://www.gnu.org/licenses/>.
 
 #import "OTREncryptionManager.h"
-
-#import "message.h"
-#import "privkey.h"
-
-#define PRIVKEYFNAME @"otr.private_key"
-#define STOREFNAME @"otr.fingerprints"
+#import "OTRMessage.h"
+#import "OTRProtocolManager.h"
 
 @implementation OTREncryptionManager
 
-@synthesize userState;
 
--(id)init
-{
-    self = [super init];
-    
-    if(self)
-    {
-        // initialize OTR
-        OTRL_INIT;
-        userState = otrl_userstate_create();
-        //s_OTR_userState = userState;
+- (id) init {
+    if (self = [super init]) {
+        [OTRKit sharedInstance].delegate = self;
         
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *documentsDirectory = [paths objectAtIndex:0];
-        
-        //otrl_privkey_read(OTR_userState,"privkeyfilename");
-        FILE *privf;
-        NSString *path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@",PRIVKEYFNAME]];
-        [self protectFileWithPath:path];
-        privf = fopen([path UTF8String], "rb");
-        
-        if(privf)
-            otrl_privkey_read_FILEp(userState, privf);
-        fclose(privf);
-        
-        //otrl_privkey_read_fingerprints(OTR_userState, "fingerprintfilename", NULL, NULL);
-        FILE *storef;
-        path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@",STOREFNAME]];
-        [self protectFileWithPath:path];
-        storef = fopen([path UTF8String], "rb");
-        
-        if (storef)
-            otrl_privkey_read_fingerprints_FILEp(userState, storef, NULL, NULL);
-        fclose(storef);
     }
-    
     return self;
 }
 
-- (void) protectFileWithPath:(NSString*)path {
+
+#pragma mark OTRKitDelegate methods
+
+- (void) updateMessageStateForUsername:(NSString*)username accountName:(NSString*)accountName protocol:(NSString*)protocol messageState:(OTRKitMessageState)messageState {
+
+    OTRBuddy *buddy = [[OTRProtocolManager sharedInstance] buddyForUserName:username accountName:accountName protocol:protocol];
+    buddy.encryptionStatus = messageState;
+}
+
+- (void) injectMessage:(NSString*)message recipient:(NSString*)recipient accountName:(NSString*)accountName protocol:(NSString*)protocol {
+    OTRMessage *newMessage = [OTRMessage messageWithBuddy:[[OTRProtocolManager sharedInstance] buddyForUserName:recipient accountName:accountName protocol:protocol] message:message];
+    [newMessage send];
+}
+
++ (void) protectFileWithPath:(NSString*)path {
     NSError *error = nil;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     [fileManager setAttributes:[NSDictionary dictionaryWithObject:NSFileProtectionComplete forKey:NSFileProtectionKey] ofItemAtPath:path error:&error];

@@ -5,17 +5,34 @@
 //  Created by Chris Ballinger on 8/11/11.
 //  Copyright (c) 2011 Chris Ballinger. All rights reserved.
 //
+//  This file is part of ChatSecure.
+//
+//  ChatSecure is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  ChatSecure is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with ChatSecure.  If not, see <http://www.gnu.org/licenses/>.
 
 #import "OTRChatViewController.h"
 #import "OTREncryptionManager.h"
-#import "privkey.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Strings.h"
 #import "OTRDoubleSetting.h"
 #import "OTRConstants.h"
+#import "OTRAppDelegate.h"
 
-#define kTabBarHeight 49
+#define kTabBarHeight 0
 #define kSendButtonWidth 60
+#define ACTIONSHEET_SAFARI_TAG 0
+#define ACTIONSHEET_ENCRYPTION_OPTIONS_TAG 1
+
 
 @interface OTRChatViewController(Private)
 - (void) refreshView;
@@ -26,7 +43,6 @@
 @synthesize messageTextField;
 @synthesize buddyListController;
 @synthesize chatBoxView;
-@synthesize context;
 @synthesize lockButton, unlockedButton;
 @synthesize lastActionLink;
 @synthesize sendButton;
@@ -189,12 +205,9 @@
 
 -(void)refreshLockButton
 {
-    if(context)
+    if(buddy.encryptionStatus == kOTRKitMessageStateEncrypted)
     {
-        if(context->msgstate == OTRL_MSGSTATE_ENCRYPTED)
-            self.navigationItem.rightBarButtonItem = lockButton;
-        else
-            self.navigationItem.rightBarButtonItem = unlockedButton;
+        self.navigationItem.rightBarButtonItem = lockButton;
     }
     else
     {
@@ -204,10 +217,14 @@
 
 -(void)lockButtonPressed
 {
-    UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:CANCEL_STRING destructiveButtonTitle:nil otherButtonTitles:INITIATE_ENCRYPTED_CHAT_STRING, VERIFY_STRING, nil];
+    NSString *encryptionString = INITIATE_ENCRYPTED_CHAT_STRING;
+    if (buddy.encryptionStatus == kOTRKitMessageStateEncrypted) {
+        encryptionString = CANCEL_ENCRYPTED_CHAT_STRING;
+    }
+    UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:CANCEL_STRING destructiveButtonTitle:nil otherButtonTitles:encryptionString, VERIFY_STRING, CLEAR_CHAT_HISTORY_STRING, nil];
     popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
-    popupQuery.tag = 420;
-    [popupQuery showFromTabBar:self.tabBarController.tabBar];
+    popupQuery.tag = ACTIONSHEET_ENCRYPTION_OPTIONS_TAG;
+    [popupQuery showInView:[OTR_APP_DELEGATE window]];
 }
 
 
@@ -288,12 +305,7 @@
     
     //turn off scrolling and set the font details.
     //chatBox.scrollEnabled = NO;
-    //chatBox.font = [UIFont fontWithName:@"Helvetica" size:14]; 
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(showDisconnectionAlert:)
-     name:kOTRProtocolDiconnect
-     object:nil ];
+    //chatBox.font = [UIFont fontWithName:@"Helvetica" size:14];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -306,7 +318,7 @@
 }
 
 - (void) showDisconnectionAlert:(NSNotification*)notification {
-    NSMutableString *message = [NSMutableString stringWithString:DISCONNECTED_MESSAGE_STRING];
+    NSMutableString *message = [NSMutableString stringWithFormat:DISCONNECTED_MESSAGE_STRING, buddy.protocol.account.username];
     if ([OTRSettingsManager boolForOTRSettingKey:kOTRSettingKeyDeleteOnDisconnect]) {
         [message appendFormat:@" %@", DISCONNECTION_WARNING_STRING];
     }
@@ -314,23 +326,24 @@
     [alert show];
 }
 
-- (void) refreshContext {
-    self.context = otrl_context_find([OTRProtocolManager sharedInstance].encryptionManager.userState, [buddy.accountName UTF8String],[buddy.protocol.account.username UTF8String], [buddy.protocol.account.protocol UTF8String],NO,NULL,NULL, NULL);
-}
-
 - (void) setBuddy:(OTRBuddy *)newBuddy {
     if(buddy) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:ENCRYPTION_STATE_NOTIFICATION object:buddy];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:kOTREncryptionStateNotification object:buddy];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_PROCESSED_NOTIFICATION object:buddy];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:kOTRProtocolDiconnect object:self.buddy.protocol];
     }
     
     buddy = newBuddy;
     self.title = newBuddy.displayName;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(encryptionStateChangeNotification:) name:ENCRYPTION_STATE_NOTIFICATION object:buddy];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(encryptionStateChangeNotification:) name:kOTREncryptionStateNotification object:buddy];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageProcessedNotification:) name:MESSAGE_PROCESSED_NOTIFICATION object:buddy];
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(showDisconnectionAlert:)
+     name:kOTRProtocolDiconnect
+     object:self.buddy.protocol];
     
-    [self refreshContext];
     [self refreshLockButton];
     [self updateChatHistory];
     [self refreshView];
@@ -441,18 +454,7 @@
 
 - (void) encryptionStateChangeNotification:(NSNotification *) notification
 {
-    NSLog(@"received notification: %@",[notification name]);
-    NSDictionary *userInfo = notification.userInfo;
-    BOOL isSecure = [[userInfo objectForKey:@"secure"] boolValue];
-    
-    if (isSecure)
-    {
-        self.navigationItem.rightBarButtonItem = lockButton;
-    }
-    else
-    {
-        self.navigationItem.rightBarButtonItem = unlockedButton;
-    }
+    [self refreshLockButton];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -515,43 +517,46 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     NSLog(@"buttonIndex: %d",buttonIndex);
-    if(actionSheet.tag == 420)
+    if(actionSheet.tag == ACTIONSHEET_ENCRYPTION_OPTIONS_TAG)
     {
         if (buttonIndex == 1) // Verify
         {
-            [self refreshContext];
-            if(context)
+            NSString *msg = nil;
+            NSString *ourFingerprintString = [[OTRKit sharedInstance] fingerprintForAccountName:buddy.protocol.account.username protocol:buddy.protocol.account.protocol];
+            NSString *theirFingerprintString = [[OTRKit sharedInstance] fingerprintForUsername:buddy.accountName accountName:buddy.protocol.account.username protocol:buddy.protocol.account.protocol];
+            
+            if(ourFingerprintString && theirFingerprintString) {
+                msg = [NSString stringWithFormat:@"%@, %@:\n%@\n\n%@ %@:\n%@\n", YOUR_FINGERPRINT_STRING, buddy.protocol.account.username, ourFingerprintString, THEIR_FINGERPRINT_STRING, buddy.accountName, theirFingerprintString];
+            } else {
+                msg = SECURE_CONVERSATION_STRING;
+            }
+                            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:VERIFY_FINGERPRINT_STRING message:msg delegate:nil cancelButtonTitle:nil otherButtonTitles:OK_STRING, nil];
+            [alert show];
+        }
+        else if (buttonIndex == 0) // Initiate/cancel encryption
+        {
+            if(buddy.encryptionStatus == kOTRKitMessageStateEncrypted)
             {
-                char our_hash[45], their_hash[45];
-                
-                Fingerprint *fingerprint = context->active_fingerprint;
-                
-                otrl_privkey_fingerprint([OTRProtocolManager sharedInstance].encryptionManager.userState, our_hash, context->accountname, context->protocol);
-                NSString *msg = nil;
-                if(fingerprint && fingerprint->fingerprint) {
-                    otrl_privkey_hash_to_human(their_hash, fingerprint->fingerprint);
-                    msg = [NSString stringWithFormat:@"%@, %s:\n%s\n\n%@ %s:\n%s\n", YOUR_FINGERPRINT_STRING, context->accountname, our_hash, THEIR_FINGERPRINT_STRING, context->username, their_hash];
-                } else {
-                    msg = SECURE_CONVERSATION_STRING;
-                }
-                                
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:VERIFY_FINGERPRINT_STRING message:msg delegate:nil cancelButtonTitle:nil otherButtonTitles:OK_STRING, nil];
-                [alert show];
+                [[OTRKit sharedInstance]disableEncryptionForUsername:buddy.accountName accountName:buddy.protocol.account.username protocol:buddy.protocol.account.protocol];
+            } else {
+                OTRBuddy* theBuddy = buddy;
+                OTRMessage * newMessage = [OTRMessage messageWithBuddy:theBuddy message:@""];
+                OTRMessage *encodedMessage = [OTRCodec encodeMessage:newMessage];
+                [OTRMessage sendMessage:encodedMessage];
             }
         }
-        else if (buttonIndex == 0)
-        {
-            OTRBuddy* theBuddy = buddy;
-            OTRMessage * newMessage = [OTRMessage messageWithBuddy:theBuddy message:@""];
-            OTRMessage *encodedMessage = [OTRCodec encodeMessage:newMessage];
-            [OTRMessage sendMessage:encodedMessage];    
+        else if (buttonIndex == 2) { // Clear Chat History
+            buddy.chatHistory = [NSMutableString string];
+            buddy.lastMessage = @"";
+            [self updateChatHistory];
         }
         else if (buttonIndex == actionSheet.cancelButtonIndex) // Cancel
         {
             
         }
     }
-    else if (actionSheet.tag == 0)
+    else if (actionSheet.tag == ACTIONSHEET_SAFARI_TAG)
     {
         if (buttonIndex != actionSheet.cancelButtonIndex)
         {
@@ -586,8 +591,6 @@
         self.messageTextField.frame = CGRectMake(0, 0, self.view.frame.size.width-kSendButtonWidth, self.chatBoxView.frame.size.height);
         self.sendButton.frame = CGRectMake(self.messageTextField.frame.size.width, 0, kSendButtonWidth , self.chatBoxView.frame.size.height);
         
-        
-        [self refreshContext];
         [self refreshLockButton];
         
         if ([keyboardListener isVisible])
@@ -639,8 +642,8 @@
     {
         self.lastActionLink = request.URL;
         UIActionSheet *action = [[UIActionSheet alloc] initWithTitle:[[request.URL absoluteURL] description] delegate:self cancelButtonTitle:CANCEL_STRING destructiveButtonTitle:nil otherButtonTitles:OPEN_IN_SAFARI_STRING, nil];
-        [action setTag:0];
-        [action showFromTabBar:self.tabBarController.tabBar];
+        [action setTag:ACTIONSHEET_SAFARI_TAG];
+        [action showInView:[OTR_APP_DELEGATE window]];
     }
     return NO;
 }

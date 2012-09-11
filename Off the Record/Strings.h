@@ -5,6 +5,20 @@
 //  Created by Chris Ballinger on 4/7/12.
 //  Copyright (c) 2012 Chris Ballinger. All rights reserved.
 //
+//  This file is part of ChatSecure.
+//
+//  ChatSecure is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  ChatSecure is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with ChatSecure.  If not, see <http://www.gnu.org/licenses/>.
 
 #define BUDDY_LIST_STRING NSLocalizedString(@"Buddy List", @"Title for the buddy list tab")
 #define CONVERSATIONS_STRING NSLocalizedString(@"Conversations", @"Title for the conversations tab")
@@ -13,21 +27,27 @@
 #define CHAT_STRING NSLocalizedString(@"Chat", @"Title for chat view")
 #define CANCEL_STRING NSLocalizedString(@"Cancel", @"Cancel an alert window")
 #define INITIATE_ENCRYPTED_CHAT_STRING NSLocalizedString(@"Initiate Encrypted Chat", @"Shown when starting an encrypted chat session")
+#define CANCEL_ENCRYPTED_CHAT_STRING NSLocalizedString(@"Cancel Encrypted Chat", @"Shown when ending an encrypted chat session")
 #define VERIFY_STRING NSLocalizedString(@"Verify", @"Shown when verifying fingerprints")
+#define CLEAR_CHAT_HISTORY_STRING NSLocalizedString(@"Clear Chat History", @"String shown in dialog for removing chat history")
 #define SEND_STRING NSLocalizedString(@"Send", @"For sending a message")
 #define OK_STRING NSLocalizedString(@"OK", @"Accept the dialog")
-
+#define RECENT_STRING NSLocalizedString(@"Recent", @"Title for header of Buddy list view with Recent Buddies")
 
 // Used in OTRChatViewController
 #define YOUR_FINGERPRINT_STRING NSLocalizedString(@"Fingerprint for you", @"your fingerprint")
 #define THEIR_FINGERPRINT_STRING NSLocalizedString(@"Purported fingerprint for", @"the alleged fingerprint of their other person")
 #define SECURE_CONVERSATION_STRING NSLocalizedString(@"You must be in a secure conversation first.", @"Inform user that they must be secure their conversation before doing that action")
 #define VERIFY_FINGERPRINT_STRING NSLocalizedString(@"Verify Fingerprint", "Title of the dialog for fingerprint verification")
-#define CHAT_INSTRUCTIONS_LABEL_STRING NSLocalizedString(@"Log in on the Accounts tab and then select a buddy from the Buddy List to start chatting.", @"Instructions on how to start using the program")
+#define CHAT_INSTRUCTIONS_LABEL_STRING NSLocalizedString(@"Log in on the Settings page (found on top right corner of buddy list) and then select a buddy from the Buddy List to start chatting.", @"Instructions on how to start using the program")
 #define OPEN_IN_SAFARI_STRING NSLocalizedString(@"Open in Safari", @"Shown when trying to open a link, asking if they want to switch to Safari to view it")
 #define DISCONNECTED_TITLE_STRING NSLocalizedString(@"Disconnected", @"Title of alert when user is disconnected from protocol")
-#define DISCONNECTED_MESSAGE_STRING NSLocalizedString(@"You have disconnected.", @"Message shown when user is disconnected")
+#define DISCONNECTED_MESSAGE_STRING NSLocalizedString(@"You (%@) have disconnected.", @"Message shown when user is disconnected")
 #define DISCONNECTION_WARNING_STRING NSLocalizedString(@"When you leave this conversation it will be deleted forever.", @"Warn user that conversation will be deleted after leaving it")
+#define CONVERSATION_NOT_SECURE_WARNING_STRING NSLocalizedString(@"Warning: This chat is not encrypted", @"Warn user that the current chat is not secure")
+#define CONVERSATION_NO_LONGER_SECURE_STRING NSLocalizedString(@"The conversation with %@ is no longer secure.", @"Warn user that the current chat is no longer secure")
+#define CONVERSATION_SECURE_WARNING_STRING NSLocalizedString(@"This chat is secured",@"Warns user that the current chat is secure")
+#define CONVERSATION_SECURE_AND_VERIFIED_WARNING_STRING NSLocalizedString(@"This chat is secured and verified",@"Warns user that the current chat is secure and verified")
 
 // OTRBuddyListViewController
 #define IGNORE_STRING NSLocalizedString(@"Ignore", @"Ignore an incoming message")
@@ -35,6 +55,9 @@
 #define OFFLINE_STRING NSLocalizedString(@"Offline", @"Label in buddylist for users that are offline")
 #define AWAY_STRING NSLocalizedString(@"Away", @"Label in buddylist for users that are away")
 #define AVAILABLE_STRING NSLocalizedString(@"Available", "Label in buddylist for users that are available")
+#define OFFLINE_MESSAGE_STRING NSLocalizedString(@"is now offline", @"Message shown inline for users that are offline")
+#define AWAY_MESSAGE_STRING NSLocalizedString(@"is now away", @"Message shown inline for users that are away")
+#define AVAILABLE_MESSAGE_STRING NSLocalizedString(@"is now available", "Message shown inline for users that are available")
 #define SECURITY_WARNING_STRING NSLocalizedString(@"Security Warning", @"Title of alert box warning about security issues")
 #define AGREE_STRING NSLocalizedString(@"Agree", "Agree to EULA")
 #define DISAGREE_STRING NSLocalizedString(@"Disagree",@"Disagree with EULA")
@@ -47,6 +70,10 @@
 #define XMPP_FAIL_STRING NSLocalizedString(@"Failed to connect to XMPP server. Please check your login credentials and internet connection and try again.", @"Message when cannot connect to XMPP server")
 #define LOGGING_IN_STRING NSLocalizedString(@"Logging in...", @"shown during the login proceess")
 #define USER_PASS_BLANK_STRING NSLocalizedString(@"You must enter a username and a password to login.", @"error message shown when user doesnt fill in a username or password")
+#define BASIC_STRING NSLocalizedString(@"Basic", @"string to describe basic set of settings")
+#define ADVANCED_STRING NSLocalizedString(@"Advanced", "stirng to describe advanced set of settings")
+#define SSL_MISMATCH_STRING NSLocalizedString(@"SSL Hostname Mismatch",@"stirng for settings to allow ssl mismatch")
+#define SELF_SIGNED_SSL_STRING NSLocalizedString(@"Self Signed SSL",@"string for settings to allow self signed ssl stirng")
 
 // OTRAccountsViewController
 #define LOGOUT_STRING NSLocalizedString(@"Log Out", @"log out from account")
@@ -95,6 +122,7 @@
 #define SHARE_STRING NSLocalizedString(@"Share", @"Title for sharing a link to the app")
 #define NOT_AVAILABLE_STRING NSLocalizedString(@"Not Available", @"Shown when a feature is not available, for example SMS")
 #define SHARE_MESSAGE_STRING NSLocalizedString(@"Chat with me securely", @"Body of SMS or email when sharing a link to the app")
+#define CONNECTED_STRING NSLocalizedString(@"Connected", @"Whether or not account is logged in")
 
 // OTRSettingsDetailViewController
 #define SAVE_STRING NSLocalizedString(@"Save", "Title for button for saving a setting")
@@ -111,7 +139,7 @@
 #define READ_STRING NSLocalizedString(@"Read", @"Title for action button on alert dialog, used as a verb in the present tense")
 
 // OTRNewAccountViewControler
-#define NEW_ACCOUNT_STIRNG NSLocalizedString(@"New Account", @"Title for New Account View")
+#define NEW_ACCOUNT_STRING NSLocalizedString(@"New Account", @"Title for New Account View")
 
 //OTRAccount
 #define AIM_STRING NSLocalizedString(@"AOL Instant Messenger", "the name for AIM")

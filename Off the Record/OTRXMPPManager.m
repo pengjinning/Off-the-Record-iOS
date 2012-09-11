@@ -5,6 +5,20 @@
 //  Created by Chris Ballinger on 9/7/11.
 //  Copyright (c) 2011 Chris Ballinger. All rights reserved.
 //
+//  This file is part of ChatSecure.
+//
+//  ChatSecure is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  ChatSecure is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with ChatSecure.  If not, see <http://www.gnu.org/licenses/>.
 
 #import "OTRXMPPManager.h"
 
@@ -26,6 +40,7 @@
 #import "OTRBuddy.h"
 #import "OTRConstants.h"
 #import "OTRProtocolManager.h"
+#include <stdlib.h>
 
 // Log levels: off, error, warn, info, verbose
 #if DEBUG
@@ -329,8 +344,8 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
 	
     
 	// You may need to alter these settings depending on the server you're connecting to
-	allowSelfSignedCertificates = [OTRSettingsManager boolForOTRSettingKey:kOTRSettingKeyAllowSelfSignedSSL];
-	allowSSLHostNameMismatch = [OTRSettingsManager boolForOTRSettingKey:kOTRSettingKeyAllowSSLHostNameMismatch];
+	allowSelfSignedCertificates = account.allowSelfSignedSSL;
+	allowSSLHostNameMismatch = account.allowSSLHostNameMismatch;
 }
 
 - (void)teardownStream
@@ -416,7 +431,11 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
 		return NO;
 	}
     
-    JID = [XMPPJID jidWithString:myJID];
+    int r = arc4random() % 99999;
+    
+    NSString * resource = [NSString stringWithFormat:@"%@%d",kOTRXMPPResource,r];
+    
+    JID = [XMPPJID jidWithString:myJID resource:resource];
     
 	[xmppStream setMyJID:JID];
     [xmppStream setHostName:self.account.domain];
@@ -621,11 +640,14 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
         
         if(decodedMessage)
         {
+            [messageBuddy receiveMessage:decodedMessage.message];
+
             NSDictionary *messageInfo = [NSDictionary dictionaryWithObject:decodedMessage forKey:@"message"];
             
             [[NSNotificationCenter defaultCenter]
              postNotificationName:kOTRMessageReceived
              object:self userInfo:messageInfo];
+            
         }
 	}
 }
@@ -685,27 +707,6 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
 	{
 		body = [NSString stringWithFormat:@"Buddy request from %@", displayName];
 	}
-	
-	
-	if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
-	{
-		UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:displayName
-		                                                    message:body 
-		                                                   delegate:nil 
-		                                          cancelButtonTitle:@"Not implemented"
-		                                          otherButtonTitles:nil];
-		[alertView show];
-	} 
-	else 
-	{
-		// We are not active, so use a local notification instead
-		UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-		localNotification.alertAction = @"Not implemented";
-		localNotification.alertBody = body;
-		
-		[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
-	}
-	
 }
 
 

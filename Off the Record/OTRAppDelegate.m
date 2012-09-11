@@ -5,12 +5,24 @@
 //  Created by Chris Ballinger on 8/11/11.
 //  Copyright (c) 2011 Chris Ballinger. All rights reserved.
 //
+//  This file is part of ChatSecure.
+//
+//  ChatSecure is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  ChatSecure is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with ChatSecure.  If not, see <http://www.gnu.org/licenses/>.
 
 #import "OTRAppDelegate.h"
 
 #import "OTRBuddyListViewController.h"
-#import "OTRChatListViewController.h"
-#import "OTRAccountsViewController.h"
 #import "OTRChatViewController.h"
 #import "Strings.h"
 #import "OTRSettingsViewController.h"
@@ -18,6 +30,7 @@
 #import "DDLog.h"
 #import "OTRUIKeyboardListener.h"
 #import "Appirater.h"
+#import "OTRConstants.h"
 
 // Log levels: off, error, warn, info, verbose
 #if DEBUG
@@ -38,8 +51,8 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
 @implementation OTRAppDelegate
 
 @synthesize window = _window;
-@synthesize tabBarController = _tabBarController;
 @synthesize backgroundTask, backgroundTimer, didShowDisconnectionWarning;
+@synthesize settingsViewController, buddyListViewController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -58,44 +71,27 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
 #endif
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    UITabBarController *tabBarController = nil;
     
-    OTRBuddyListViewController *buddyListViewController = [[OTRBuddyListViewController alloc] init];
+    self.buddyListViewController = [[OTRBuddyListViewController alloc] init];
     OTRChatViewController *chatViewController = [[OTRChatViewController alloc] init];
     buddyListViewController.chatViewController = chatViewController;
-    OTRChatListViewController *chatListViewController = [[OTRChatListViewController alloc] init];
-    //OTRAccountsViewController *accountsViewController = [[OTRAccountsViewController alloc] init];
-    OTRSettingsViewController *settingsViewController = [[OTRSettingsViewController alloc] init];
+    self.settingsViewController = [[OTRSettingsViewController alloc] init];
 
-    chatListViewController.buddyController = buddyListViewController;
-    buddyListViewController.chatListController = chatListViewController;
-    buddyListViewController.tabController = _tabBarController;
-    tabBarController = [[UITabBarController alloc] init];
-    UINavigationController *accountsNavController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
     UINavigationController *buddyListNavController = [[UINavigationController alloc] initWithRootViewController:buddyListViewController];
-    
+    UIViewController *rootViewController = nil;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        UINavigationController *chatListNavController = [[UINavigationController alloc] initWithRootViewController:chatListViewController];
-        tabBarController.viewControllers = [NSArray arrayWithObjects:buddyListNavController, chatListNavController, accountsNavController, nil];
+        rootViewController = buddyListNavController;
     } else {
         UINavigationController *chatNavController = [[UINavigationController alloc ]initWithRootViewController:chatViewController];
         UISplitViewController *splitViewController = [[UISplitViewController alloc] init];
         splitViewController.viewControllers = [NSArray arrayWithObjects:buddyListNavController, chatNavController, nil];
         splitViewController.delegate = chatViewController;
-        tabBarController.viewControllers = [NSArray arrayWithObjects:splitViewController, accountsNavController, nil];
+        rootViewController = splitViewController;
         splitViewController.title = CHAT_STRING;
-        splitViewController.tabBarItem.image = [UIImage imageNamed:@"08-chat.png"];
     }
 
-    self.tabBarController = tabBarController;
-    self.window.rootViewController = self.tabBarController;
+    self.window.rootViewController = rootViewController;
     [self.window makeKeyAndVisible];
-    
-    UILocalNotification *localNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
-    if (localNotification) {
-        NSLog(@"Notification Body: %@",localNotification.alertBody);
-        NSLog(@"%@", localNotification.userInfo);
-    }
     
     application.applicationIconBadgeNumber = 0;
     [OTRUIKeyboardListener shared];
@@ -148,6 +144,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
         if (localNotif) {
             localNotif.alertBody = EXPIRATION_STRING;
             localNotif.alertAction = OK_STRING;
+            localNotif.soundName = UILocalNotificationDefaultSoundName;
             [application presentLocalNotificationNow:localNotif];
         }
         self.didShowDisconnectionWarning = YES;
@@ -238,11 +235,20 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
 }
 */
 
-/*- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
     NSLog(@"Notification Body: %@", notification.alertBody);
-    NSLog(@"%@", notification.userInfo);
+    NSLog(@"User Info: %@", notification.userInfo);
     
-    application.applicationIconBadgeNumber = 0;
-}*/
+    NSDictionary *userInfo = notification.userInfo;
+    NSString *accountName = [userInfo objectForKey:kOTRNotificationAccountNameKey];
+    NSString *userName = [userInfo objectForKey:kOTRNotificationUserNameKey];
+    NSString *protocol = [userInfo objectForKey:kOTRNotificationProtocolKey];
+    if (!accountName || !userName || !protocol) {
+        return;
+    }
+    OTRProtocolManager *protocolManager = [OTRProtocolManager sharedInstance];
+    OTRBuddy *buddy = [protocolManager buddyForUserName:userName accountName:accountName protocol:protocol];
+    [buddyListViewController enterConversationWithBuddy:buddy];
+}
 
 @end

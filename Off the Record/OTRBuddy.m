@@ -5,6 +5,20 @@
 //  Created by Chris Ballinger on 9/12/11.
 //  Copyright (c) 2011 Chris Ballinger. All rights reserved.
 //
+//  This file is part of ChatSecure.
+//
+//  ChatSecure is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  ChatSecure is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with ChatSecure.  If not, see <http://www.gnu.org/licenses/>.
 
 #import "OTRBuddy.h"
 #import "OTRMessage.h"
@@ -24,6 +38,7 @@
 @synthesize chatHistory;
 @synthesize lastMessage;
 @synthesize lastMessageDisconnected;
+@synthesize encryptionStatus;
 
 - (void) dealloc {
     self.accountName = nil;
@@ -46,13 +61,10 @@
         self.chatHistory = [NSMutableString string];
         self.lastMessage = @"";
         self.lastMessageDisconnected = NO;
+        self.encryptionStatus = kOTRKitMessageStatePlaintext;
         
         [[NSNotificationCenter defaultCenter]
-         addObserver:self selector:@selector(protocolDisconnected) name:kOTRProtocolDiconnect object:nil];
-         
-         
-         //postNotificationName:@"XMPPDisconnectedNotification" object:nil]; 
-        
+         addObserver:self selector:@selector(protocolDisconnected:) name:kOTRProtocolDiconnect object:buddyProtocol];
     }
     return self;
 }
@@ -112,8 +124,15 @@
             // We are not active, so use a local notification instead
             UILocalNotification *localNotification = [[UILocalNotification alloc] init];
             localNotification.alertAction = REPLY_STRING;
+            localNotification.soundName = UILocalNotificationDefaultSoundName;
             localNotification.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber + 1;
             localNotification.alertBody = [NSString stringWithFormat:@"%@: %@",self.displayName,self.lastMessage];
+          
+            NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
+            [userInfo setObject:accountName forKey:kOTRNotificationUserNameKey];
+            [userInfo setObject:protocol.account.username forKey:kOTRNotificationAccountNameKey];
+            [userInfo setObject:protocol.account.protocol forKey:kOTRNotificationProtocolKey];
+            localNotification.userInfo = userInfo;
             
             [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
         }
@@ -136,26 +155,65 @@
         if ([self.chatHistory length]!=0 && newStatus!=status)
         {
             if( newStatus == 0)
-                [self receiveStatusMessage:OFFLINE_STRING];
+                [self receiveStatusMessage:OFFLINE_MESSAGE_STRING];
             else if (newStatus == 1)
-                [self receiveMessage:AWAY_STRING];
+                [self receiveStatusMessage:AWAY_MESSAGE_STRING];
             else if( newStatus == 2)
-                [self receiveMessage:AVAILABLE_STRING];
+                [self receiveStatusMessage:AVAILABLE_MESSAGE_STRING];
             
         }
     }
     status = newStatus;
 }
          
--(void) protocolDisconnected
+-(void) protocolDisconnected:(id)sender
 {
     if( [self.chatHistory length]!=0 && !lastMessageDisconnected)
     {
         [chatHistory appendFormat:@"<p><strong style=\"color:blue\"> You </strong> Disconnected </p>"];
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PROCESSED_NOTIFICATION object:self];
         lastMessageDisconnected = YES;
+        self.status = kOTRBuddyStatusOffline;
     }
-             
+}
+
+-(void)receiveEncryptionMessage:(NSString *)message
+{
+    [chatHistory appendFormat:@"<p><strong>%@</strong></p>",message];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PROCESSED_NOTIFICATION object:self];
+    
+}
+
+-(void)setEncryptionStatus:(OTRKitMessageState)newEncryptionStatus
+{
+    if(![self.chatHistory length] && newEncryptionStatus != kOTRKitMessageStateEncrypted)
+    {
+        [self receiveEncryptionMessage:CONVERSATION_NOT_SECURE_WARNING_STRING];
+    }
+    else if(newEncryptionStatus != self.encryptionStatus)
+    {
+        if (newEncryptionStatus != kOTRKitMessageStateEncrypted && encryptionStatus == kOTRKitMessageStateEncrypted) {
+            [[[UIAlertView alloc] initWithTitle:SECURITY_WARNING_STRING message:[NSString stringWithFormat:CONVERSATION_NO_LONGER_SECURE_STRING, self.displayName] delegate:nil cancelButtonTitle:OK_STRING otherButtonTitles:nil] show];
+        }
+        switch (newEncryptionStatus) {
+            case kOTRKitMessageStatePlaintext:
+                [self receiveEncryptionMessage:CONVERSATION_NOT_SECURE_WARNING_STRING];
+                break;
+            case kOTRKitMessageStateEncrypted:
+                [self receiveEncryptionMessage:CONVERSATION_SECURE_WARNING_STRING];
+                break;
+            case kOTRKitMessageStateFinished:
+                [self receiveEncryptionMessage:CONVERSATION_NOT_SECURE_WARNING_STRING];
+                break;
+            default:
+                NSLog(@"Unknown Encryption State");
+                break;
+        }
+        
+    }
+    encryptionStatus = newEncryptionStatus;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kOTREncryptionStateNotification object:self];
 }
 
 @end
