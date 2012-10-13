@@ -36,6 +36,11 @@
 #define ACTIONSHEET_DISCONNECT_TAG 1
 #define ALERTVIEW_DELETE_TAG 1
 
+@interface OTRSettingsViewController(Private)
+- (void) addAccount:(id)sender;
+- (void) showLoginControllerForAccount:(OTRAccount*)account;
+@end
+
 @implementation OTRSettingsViewController
 @synthesize settingsTableView, settingsManager, loginController, selectedAccount, selectedIndexPath;
 
@@ -205,7 +210,7 @@
                 self.selectedAccount = account;
                 self.selectedIndexPath = indexPath;
                 logoutSheet.tag = ACTIONSHEET_DISCONNECT_TAG;
-                [logoutSheet showInView:[OTR_APP_DELEGATE window]];
+                [OTR_APP_DELEGATE presentActionSheet:logoutSheet inView:self.view];
             }
         }
     } else {
@@ -236,7 +241,7 @@
 }
 
 - (void) showLoginControllerForAccount:(OTRAccount*)account {
-    OTRLoginViewController *loginViewController = [[OTRLoginViewController alloc] initWithAccount:account];
+    OTRLoginViewController *loginViewController = [OTRLoginViewController loginViewControllerWithAcccount:account];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginViewController];
     nav.modalPresentationStyle = UIModalPresentationFormSheet;
     [self presentModalViewController:nav animated:YES];

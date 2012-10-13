@@ -111,7 +111,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OTRAccount * cellAccount = [accounts objectAtIndex:indexPath.row];
-    OTRLoginViewController *loginViewController = [[OTRLoginViewController alloc] initWithAccount:cellAccount];
+    OTRLoginViewController *loginViewController = [OTRLoginViewController loginViewControllerWithAcccount:cellAccount];
     loginViewController.isNewAccount = YES;
     [self.navigationController pushViewController:loginViewController animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];    
@@ -124,7 +124,12 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return YES;
+    // Return YES for supported orientations
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        return YES;
+    } else {
+        return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    }
 }
 
 @end

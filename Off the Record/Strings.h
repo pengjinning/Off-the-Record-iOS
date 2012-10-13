@@ -49,6 +49,12 @@
 #define CONVERSATION_SECURE_WARNING_STRING NSLocalizedString(@"This chat is secured",@"Warns user that the current chat is secure")
 #define CONVERSATION_SECURE_AND_VERIFIED_WARNING_STRING NSLocalizedString(@"This chat is secured and verified",@"Warns user that the current chat is secure and verified")
 
+#define CHAT_STATE_ACTIVE_STRING NSLocalizedString(@"Active",@"String to be displayed when a buddy is Active")
+#define CHAT_STATE_COMPOSING_STRING NSLocalizedString(@"Typing",@"String to be displayed when a buddy is currently composing a message")
+#define CHAT_STATE_PAUSED_STRING NSLocalizedString(@"Entered Text",@"String to be displayed when a buddy has stopped composing and text has been entered")
+#define CHAT_STATE_INACTVIE_STRING NSLocalizedString(@"Inactive",@"String to be displayed when a budy has become inactive")
+#define CHAT_STATE_GONE_STRING NSLocalizedString(@"Gone",@"String to be displayed when a buddy is inactive for an extended period of time")
+
 // OTRBuddyListViewController
 #define IGNORE_STRING NSLocalizedString(@"Ignore", @"Ignore an incoming message")
 #define REPLY_STRING NSLocalizedString(@"Reply", @"Reply to an incoming message")
@@ -74,6 +80,9 @@
 #define ADVANCED_STRING NSLocalizedString(@"Advanced", "stirng to describe advanced set of settings")
 #define SSL_MISMATCH_STRING NSLocalizedString(@"SSL Hostname Mismatch",@"stirng for settings to allow ssl mismatch")
 #define SELF_SIGNED_SSL_STRING NSLocalizedString(@"Self Signed SSL",@"string for settings to allow self signed ssl stirng")
+#define PORT_STRING NSLocalizedString(@"Port", @"Label for port number field for connecting to service")
+#define GOOGLE_TALK_EXAMPLE_STRING NSLocalizedString(@"user@gmail.com", @"example of a google talk account");
+#define REQUIRED_STRING NSLocalizedString(@"Required",@"String to let user know a certain field like a password is required to create an account")
 
 // OTRAccountsViewController
 #define LOGOUT_STRING NSLocalizedString(@"Log Out", @"log out from account")

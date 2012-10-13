@@ -236,8 +236,8 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
 */
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
-    NSLog(@"Notification Body: %@", notification.alertBody);
-    NSLog(@"User Info: %@", notification.userInfo);
+    //NSLog(@"Notification Body: %@", notification.alertBody);
+    //NSLog(@"User Info: %@", notification.userInfo);
     
     NSDictionary *userInfo = notification.userInfo;
     NSString *accountName = [userInfo objectForKey:kOTRNotificationAccountNameKey];
@@ -249,6 +249,14 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
     OTRProtocolManager *protocolManager = [OTRProtocolManager sharedInstance];
     OTRBuddy *buddy = [protocolManager buddyForUserName:userName accountName:accountName protocol:protocol];
     [buddyListViewController enterConversationWithBuddy:buddy];
+}
+
+- (void) presentActionSheet:(UIActionSheet*)sheet inView:(UIView*)view {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        [sheet showInView:view];
+    } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [sheet showInView:self.window];
+    }
 }
 
 @end

@@ -28,6 +28,10 @@
 #define ACTIONSHEET_SHARE_TAG 2
 #define ACTIONSHEET_LINK_TAG 1
 
+@interface OTRAboutViewController(Private)
+- (NSArray*) buttonTitlesForShareButton;
+@end
+
 @implementation OTRAboutViewController
 @synthesize versionLabel, aboutTextView, lastActionLink, imageView;
 
@@ -137,7 +141,7 @@
     sheet.tag = ACTIONSHEET_SHARE_TAG;
     sheet.cancelButtonIndex = [buttonTitles count] - 1;
     
-    [sheet showInView:[OTR_APP_DELEGATE window]];
+    [OTR_APP_DELEGATE presentActionSheet:sheet inView:self.view];
 }
 
 - (NSArray*) buttonTitlesForShareButton {
@@ -225,7 +229,7 @@
         self.lastActionLink = request.URL;
         UIActionSheet *action = [[UIActionSheet alloc] initWithTitle:[[request.URL absoluteURL] description] delegate:self cancelButtonTitle:CANCEL_STRING destructiveButtonTitle:nil otherButtonTitles:OPEN_IN_SAFARI_STRING, nil];
         action.tag = ACTIONSHEET_LINK_TAG;
-        [action showInView:[OTR_APP_DELEGATE window]];
+        [OTR_APP_DELEGATE presentActionSheet:action inView:self.view];
     }
     return NO;
 }

@@ -34,6 +34,8 @@
 @property (nonatomic, retain) UIButton *sendButton;
 @property (nonatomic, retain) UIView *chatBoxView;
 @property (nonatomic, retain) UILabel *instructionsLabel;
+@property (nonatomic, strong) UILabel *chatStateLabel;
+@property (nonatomic, strong) UIImageView * chatStateImage;
 
 @property (nonatomic, retain) OTRBuddy *buddy;
 
@@ -46,6 +48,8 @@
 @property (nonatomic, strong) OTRUIKeyboardListener * keyboardListener;
 
 
+
+
 - (void)sendButtonPressed:(id)sender;
 - (void)scrollTextViewToBottom;
 
@@ -53,5 +57,6 @@
 - (void)setupLockButton;
 - (void)refreshLockButton;
 - (void)lockButtonPressed;
+- (void)updateChatState:(BOOL)animated;
 
 @end

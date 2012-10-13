@@ -50,11 +50,14 @@
 @synthesize buddy;
 @synthesize instructionsLabel;
 @synthesize keyboardListener;
+@synthesize chatStateLabel;
+@synthesize chatStateImage;
 
 - (void) dealloc {
     self.lastActionLink = nil;
     self.buddyListController = nil;
     self.buddy = nil;
+    self.chatStateImage = nil;
 }
 
 - (void)viewDidUnload {
@@ -224,7 +227,7 @@
     UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:CANCEL_STRING destructiveButtonTitle:nil otherButtonTitles:encryptionString, VERIFY_STRING, CLEAR_CHAT_HISTORY_STRING, nil];
     popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
     popupQuery.tag = ACTIONSHEET_ENCRYPTION_OPTIONS_TAG;
-    [popupQuery showInView:[OTR_APP_DELEGATE window]];
+    [OTR_APP_DELEGATE presentActionSheet:popupQuery inView:self.view];
 }
 
 
@@ -298,11 +301,6 @@
     
     
     //set notification for when a key is pressed.
-    [[NSNotificationCenter defaultCenter] addObserver:self 
-                                             selector: @selector(keyPressed:) 
-                                                 name: UITextViewTextDidChangeNotification 
-                                               object: nil];
-    
     //turn off scrolling and set the font details.
     //chatBox.scrollEnabled = NO;
     //chatBox.font = [UIFont fontWithName:@"Helvetica" size:14];
@@ -347,15 +345,93 @@
     [self refreshLockButton];
     [self updateChatHistory];
     [self refreshView];
+    [self updateChatState:NO];
 }
-     
+
+
      
 - (void) messageProcessedNotification:(NSNotification*)notification {
     [self updateChatHistory];
+    [self updateChatState:YES];
+}
+
+- (void)updateChatState:(BOOL)animated
+{
+    CGFloat animateTime;
+    if(animated)
+        animateTime = 1.0;
+    else
+        animateTime = 0.0;
+    
+    if(!chatStateLabel)
+    {
+        chatStateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 22)];
+        chatStateLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        chatStateLabel.backgroundColor = [UIColor blackColor];
+        //chatStateLabel.alpha = .7;
+        chatStateLabel.tag = 888;
+        chatStateLabel.textColor = [UIColor whiteColor];
+        //[self.view addSubview:chatStateLabel];
+    }
+    if(!chatStateImage)
+    {
+        chatStateImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width-25, 0, 25, 25)];
+        chatStateImage.image = [UIImage imageNamed:@"pencil"];
+        chatStateImage.alpha = 0.0;
+        [self.view addSubview:chatStateImage];
+    }
+    
+    
+    
+    if(self.buddy.chatState == kOTRChatStateComposing)
+    {
+        chatStateLabel.text = CHAT_STATE_COMPOSING_STRING;
+        [UIView animateWithDuration:animateTime animations:^{
+            chatStateImage.alpha = 1.0;
+        }];
+        
+    }
+    else if(self.buddy.chatState == kOTRChatStatePaused)
+    {
+        chatStateLabel.text = CHAT_STATE_PAUSED_STRING;
+        [UIView animateWithDuration:animateTime animations:^{
+            chatStateImage.alpha = 0.3;
+        }];
+        
+    }
+    else if(self.buddy.chatState == kOTRChatStateActive)
+    {
+        chatStateLabel.text = CHAT_STATE_ACTIVE_STRING;
+        [UIView animateWithDuration:animateTime animations:^{
+            chatStateImage.alpha = 0;
+        }];
+    }
+    else if(self.buddy.chatState == kOTRChatStateInactive)
+        chatStateLabel.text = CHAT_STATE_INACTVIE_STRING;
+    else if(self.buddy.chatState == kOTRChatStateGone)
+        chatStateLabel.text = CHAT_STATE_GONE_STRING;
+    else
+        chatStateImage.alpha = 0;
+    
 }
 
 
--(void) keyPressed: (NSNotification*) notification{
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSRange textFieldRange = NSMakeRange(0, [textField.text length]);
+    
+    [buddy sendComposingChatState];
+    
+    if (NSEqualRanges(range, textFieldRange) && [string length] == 0)
+    {
+        [buddy sendActiveChatState];
+    }
+    
+    return YES;
+}
+
+-(void) keyPressed
+{
 /*	// get the size of the text block so we can work our magic
 	//CGSize newSize = [chatBox.text 
     //                  sizeWithFont:[UIFont fontWithName:@"Helvetica" size:14] 
@@ -480,7 +556,8 @@
 - (void)sendButtonPressed:(id)sender {
     BOOL secure = self.navigationItem.rightBarButtonItem == lockButton;
     [buddy sendMessage:messageTextField.text secure:secure];
-    messageTextField.text = @"";    
+    messageTextField.text = @"";
+    [self.buddy.pausedChatStateTimer invalidate];
     [self chatButtonClick];
     [self updateChatHistory];
 }
@@ -600,8 +677,24 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    self.messageTextField.text = self.buddy.composingMessageString;
+    if(![self.buddy.composingMessageString length])
+    {
+        [self.buddy sendActiveChatState];
+    }
     [self refreshView];
     [self updateChatHistory];
+    [self updateChatState:NO];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.buddy.composingMessageString = self.messageTextField.text;
+    if(![self.buddy.composingMessageString length])
+    {
+        [self.buddy sendInactiveChatState];
+    }
 }
 
 /*- (void)debugButton:(UIBarButtonItem *)sender
@@ -643,7 +736,7 @@
         self.lastActionLink = request.URL;
         UIActionSheet *action = [[UIActionSheet alloc] initWithTitle:[[request.URL absoluteURL] description] delegate:self cancelButtonTitle:CANCEL_STRING destructiveButtonTitle:nil otherButtonTitles:OPEN_IN_SAFARI_STRING, nil];
         [action setTag:ACTIONSHEET_SAFARI_TAG];
-        [action showInView:[OTR_APP_DELEGATE window]];
+        [OTR_APP_DELEGATE presentActionSheet:action inView:self.view];
     }
     return NO;
 }

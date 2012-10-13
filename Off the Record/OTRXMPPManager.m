@@ -29,6 +29,8 @@
 #import "XMPPRosterCoreDataStorage.h"
 #import "XMPPvCardAvatarModule.h"
 #import "XMPPvCardCoreDataStorage.h"
+#import "XMPPMessage+XEP_0184.h"
+#import "XMPPMessage+XEP_0085.h"
 #import "Strings.h"
 
 #import "DDLog.h"
@@ -37,7 +39,6 @@
 #import <CFNetwork/CFNetwork.h>
 
 #import "OTRSettingsManager.h"
-#import "OTRBuddy.h"
 #import "OTRConstants.h"
 #import "OTRProtocolManager.h"
 #include <stdlib.h>
@@ -269,7 +270,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
 	// You can do it however you like! It's your application.
 	// But you do need to provide the roster with some storage facility.
     
-    NSLog(@"Unique Identifier: %@",self.account.uniqueIdentifier);
+    //NSLog(@"Unique Identifier: %@",self.account.uniqueIdentifier);
 	
     //xmppRosterStorage = [[XMPPRosterCoreDataStorage alloc] initWithDatabaseFilename:self.account.uniqueIdentifier];
     //  xmppRosterStorage = [[XMPPRosterCoreDataStorage alloc] init];
@@ -327,6 +328,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
     
 	[xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
 	[xmppRoster addDelegate:self delegateQueue:dispatch_get_main_queue()];
+    [xmppCapabilities addDelegate:self delegateQueue:dispatch_get_main_queue()];
     
 	// Optional:
 	// 
@@ -406,13 +408,27 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
     [[NSNotificationCenter defaultCenter]
      postNotificationName:kOTRProtocolLoginFail object:self];    
 }
+
+///////////////////////////////
+#pragma mark Capabilities Collected
+- (void)xmppCapabilities:(XMPPCapabilities *)sender collectingMyCapabilities:(NSXMLElement *)query
+{
+    NSXMLElement * deliveryReceiptsFeature = [NSXMLElement elementWithName:@"feature"];
+    [deliveryReceiptsFeature addAttributeWithName:@"var" stringValue:@"urn:xmpp:receipts"];
+    [query addChild:deliveryReceiptsFeature];
+    
+    NSXMLElement * chatStateFeature = [NSXMLElement elementWithName:@"feature"];
+	[chatStateFeature addAttributeWithName:@"var" stringValue:@"http://jabber.org/protocol/chatstates"];
+    [query addChild:chatStateFeature];
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Connect/disconnect
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (BOOL)connectWithJID:(NSString*) myJID password:(NSString*)myPassword;
 {
-    NSLog(@"myJID %@",myJID);
+    //NSLog(@"myJID %@",myJID);
 	if (![xmppStream isDisconnected]) {
 		return YES;
 	}
@@ -439,6 +455,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
     
 	[xmppStream setMyJID:JID];
     [xmppStream setHostName:self.account.domain];
+    [xmppStream setHostPort:self.account.port];
 	password = myPassword;
     
 	NSError *error = nil;
@@ -587,14 +604,16 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
 {
 	DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
 	
-	isXmppConnected = YES;
 	
 	NSError *error = nil;
 	
 	if (![[self xmppStream] authenticateWithPassword:password error:&error])
 	{
 		DDLogError(@"Error authenticating: %@", error);
+        isXmppConnected = NO;
+        return;
 	}
+    isXmppConnected = YES;
 }
 
 - (void)xmppStreamDidAuthenticate:(XMPPStream *)sender
@@ -618,14 +637,59 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
 	return NO;
 }
 
+-(OTRBuddy *)buddyWithMessage:(XMPPMessage *)message
+{
+    XMPPUserCoreDataStorageObject *user = [xmppRosterStorage userForJID:[message from]
+                                                             xmppStream:xmppStream
+                                                   managedObjectContext:[self managedObjectContext_roster]];
+    
+    return [protocolBuddyList objectForKey:user.jidStr];
+}
+
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
 {
 	DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
     
 	// A simple example of inbound message handling.
+    if([message hasChatState])
+    {
+        OTRBuddy * messageBuddy = [self buddyWithMessage:message];
+        if([message isComposingChatState])
+            [messageBuddy receiveChatStateMessage:kOTRChatStateComposing];
+        else if([message isPausedChatState])
+            [messageBuddy receiveChatStateMessage:kOTRChatStatePaused];
+        else if([message isActiveChatState])
+            [messageBuddy receiveChatStateMessage:kOTRChatStateActive];
+        else if([message isInactiveChatState])
+            [messageBuddy receiveChatStateMessage:kOTRChatStateInactive];
+        else if([message isGoneChatState])
+            [messageBuddy receiveChatStateMessage:kOTRChatStateGone];
+    }
+    
+    //Posible needs a setting to turn on and off
+    if([message hasReceiptRequest])
+    {
+        XMPPMessage * responseMessage = [message generateReceiptResponse];
+        [xmppStream sendElement:responseMessage];
+    }
+    
+    if ([message hasReceiptResponse]) {
+        
+        XMPPUserCoreDataStorageObject *user = [xmppRosterStorage userForJID:[message from]
+                                                                 xmppStream:xmppStream
+                                                       managedObjectContext:[self managedObjectContext_roster]];
+        
+        OTRBuddy * messageBuddy = [protocolBuddyList objectForKey:user.jidStr];
+        [messageBuddy receiveReceiptResonse:[message extractReceiptResponseID]];
+    }
+    
+    
     
 	if ([message isChatMessageWithBody])
-	{        
+	{
+        
+        
+        
         XMPPUserCoreDataStorageObject *user = [xmppRosterStorage userForJID:[message from]
                                                                  xmppStream:xmppStream
                                                        managedObjectContext:[self managedObjectContext_roster]];
@@ -633,7 +697,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
         NSString *body = [[message elementForName:@"body"] stringValue];
         //NSString *displayName = [user displayName];
         
-        OTRBuddy * messageBuddy = [protocolBuddyList objectForKey:user.jidStr];
+        OTRBuddy * messageBuddy = [self buddyWithMessage:message];
         
         OTRMessage *otrMessage = [OTRMessage messageWithBuddy:messageBuddy message:body];        
         OTRMessage *decodedMessage = [OTRCodec decodeMessage:otrMessage];
@@ -726,12 +790,23 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
 		NSXMLElement *message = [NSXMLElement elementWithName:@"message"];
 		[message addAttributeWithName:@"type" stringValue:@"chat"];
 		[message addAttributeWithName:@"to" stringValue:theMessage.buddy.accountName];
+        NSString * messageID = [NSString stringWithFormat:@"%d",theMessage.buddy.numberOfMessagesSent];
+        [message addAttributeWithName:@"id" stringValue:messageID];
+        
+        NSXMLElement * receiptRequest = [NSXMLElement elementWithName:@"request"];
+        [receiptRequest addAttributeWithName:@"xmlns" stringValue:@"urn:xmpp:receipts"];
+        [message addChild:receiptRequest];
+        
 		[message addChild:body];
+        
+        XMPPMessage * xMessage = [XMPPMessage messageFromElement:message];
+        [xMessage addActiveChatState];
 		
 		[xmppStream sendElement:message];
+       
     }
-    
 }
+
 - (NSString*) accountName
 {
     return [JID full];
@@ -801,6 +876,43 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
 {
     
     [self connectWithJID:self.account.username password:myPassword];
+}
+
+-(void)sendChatState:(int)chatState withBuddy:(OTRBuddy *)buddy
+{
+    NSXMLElement *message = [NSXMLElement elementWithName:@"message"];
+    [message addAttributeWithName:@"type" stringValue:@"chat"];
+    [message addAttributeWithName:@"to" stringValue:buddy.accountName];
+    XMPPMessage * xMessage = [XMPPMessage messageFromElement:message];
+    
+    BOOL shouldSend = YES;
+    
+    switch (chatState)
+    {
+        case kOTRChatStateActive  :
+            [xMessage addActiveChatState];
+            break;
+        case kOTRChatStateComposing  :
+            [xMessage addComposingChatState];
+            break;
+        case kOTRChatStateInactive:
+            [xMessage addInactiveChatState];
+            break;
+        case kOTRChatStatePaused:
+            [xMessage addPausedChatState];
+            break;
+        case kOTRChatStateGone:
+            [xMessage addGoneChatState];
+            break;
+        default :
+            shouldSend = NO;
+            break;
+    }
+    
+    if(shouldSend)
+        [xmppStream sendElement:message];
+    
+    
 }
 
 
