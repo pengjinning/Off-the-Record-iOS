@@ -12,6 +12,12 @@ However, developing and supporting this project is hard work and costs real mone
 
 [![donation](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XRBHJ9AX5VWNA)
 
+Building
+=========
+
+1. Download [jrtplib](http://research.edm.uhasselt.be/~jori/page/index.php?n=CS.Jrtplib) and unzip it to $SRCROOT/jrtplib
+2. `$ cd jrtplib`
+3. `$ cmake . -G Xcode` (requires cmake, use Homebrew to install it)
 
 Localization
 =========

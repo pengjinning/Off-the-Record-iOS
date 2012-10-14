@@ -237,6 +237,8 @@
 		D95F8E941419C3E10094A634 /* chatsecure_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D95F8E931419C3E00094A634 /* chatsecure_icon@2x.png */; };
 		D95F8E961419C58D0094A634 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = D95F8E951419C58D0094A634 /* Default.png */; };
 		D95F8E981419C5900094A634 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D95F8E971419C5900094A634 /* Default@2x.png */; };
+		D960F7F3162A479C00535240 /* libjrtp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D960F7E6162A478E00535240 /* libjrtp.a */; };
+		D960F802162A49B600535240 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D960F7FE162A497100535240 /* libstdc++.dylib */; };
 		D96495C4153629FE009A8C33 /* OTRSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = D96495C3153629FE009A8C33 /* OTRSetting.m */; };
 		D96495C8153635A9009A8C33 /* OTRBoolSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = D96495C7153635A8009A8C33 /* OTRBoolSetting.m */; };
 		D96495CB15363C0F009A8C33 /* OTRViewSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = D96495CA15363C0F009A8C33 /* OTRViewSetting.m */; };
@@ -320,6 +322,62 @@
 			proxyType = 1;
 			remoteGlobalIDString = D905CFCA155B2B0000654181;
 			remoteInfo = OTRKit;
+		};
+		D960F7E3162A478E00535240 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D960F7D0162A478E00535240 /* jrtplib.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B9E3708B687A44DF8E1FB349;
+			remoteInfo = "jrtplib-shared";
+		};
+		D960F7E5162A478E00535240 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D960F7D0162A478E00535240 /* jrtplib.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EB2A00719F814A12BD366F9C;
+			remoteInfo = "jrtplib-static";
+		};
+		D960F7E7162A478E00535240 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D960F7D0162A478E00535240 /* jrtplib.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0D226673AAC34F5BB6D760D3;
+			remoteInfo = example1;
+		};
+		D960F7E9162A478E00535240 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D960F7D0162A478E00535240 /* jrtplib.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B2BFA6BE7206407985BF1059;
+			remoteInfo = example2;
+		};
+		D960F7EB162A478E00535240 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D960F7D0162A478E00535240 /* jrtplib.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F52E7B5B70BC4A2190353CE2;
+			remoteInfo = example3;
+		};
+		D960F7ED162A478E00535240 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D960F7D0162A478E00535240 /* jrtplib.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 01CBA0E92D01464294EFE975;
+			remoteInfo = example4;
+		};
+		D960F7EF162A478E00535240 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D960F7D0162A478E00535240 /* jrtplib.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 47C79704D5894DF2A212965B;
+			remoteInfo = example5;
+		};
+		D960F7F1162A479700535240 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D960F7D0162A478E00535240 /* jrtplib.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C0B2E864C8EA47999A55AC1F;
+			remoteInfo = "jrtplib-static";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -846,6 +904,10 @@
 		D95F8E931419C3E00094A634 /* chatsecure_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "chatsecure_icon@2x.png"; path = "../chatsecure_icon@2x.png"; sourceTree = "<group>"; };
 		D95F8E951419C58D0094A634 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
 		D95F8E971419C5900094A634 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../Default@2x.png"; sourceTree = "<group>"; };
+		D960F7D0162A478E00535240 /* jrtplib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = jrtplib.xcodeproj; path = jrtplib/jrtplib.xcodeproj; sourceTree = "<group>"; };
+		D960F7F5162A48E700535240 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		D960F7FE162A497100535240 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
+		D960F800162A497700535240 /* libc++abi.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++abi.dylib"; path = "usr/lib/libc++abi.dylib"; sourceTree = SDKROOT; };
 		D96495C2153629FE009A8C33 /* OTRSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTRSetting.h; sourceTree = "<group>"; };
 		D96495C3153629FE009A8C33 /* OTRSetting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTRSetting.m; sourceTree = "<group>"; };
 		D96495C6153635A8009A8C33 /* OTRBoolSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTRBoolSetting.h; sourceTree = "<group>"; };
@@ -965,6 +1027,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D960F802162A49B600535240 /* libstdc++.dylib in Frameworks */,
+				D960F7F3162A479C00535240 /* libjrtp.a in Frameworks */,
 				D92061E915E2E185003EEF3A /* libOTRKit.a in Frameworks */,
 				D989E88E15D4F92E0081DFD1 /* Twitter.framework in Frameworks */,
 				D93C31B7159A8B4F006316C7 /* Security.framework in Frameworks */,
@@ -1937,6 +2001,20 @@
 			path = LibOrange/LibOrange;
 			sourceTree = "<group>";
 		};
+		D960F7D1162A478E00535240 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D960F7E4162A478E00535240 /* libjrtp.dylib */,
+				D960F7E6162A478E00535240 /* libjrtp.a */,
+				D960F7E8162A478E00535240 /* example1 */,
+				D960F7EA162A478E00535240 /* example2 */,
+				D960F7EC162A478E00535240 /* example3 */,
+				D960F7EE162A478E00535240 /* example4 */,
+				D960F7F0162A478E00535240 /* example5 */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		D96495CC15363C1F009A8C33 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -1980,6 +2058,7 @@
 		D9D69B03141806150056FB9E /* 3rd Party Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D960F7D0162A478E00535240 /* jrtplib.xcodeproj */,
 				D95B35EC16239D390091F843 /* LibOrange */,
 				D937550C1608034B0059321E /* CrittercismSDK */,
 				D9375090160801160059321E /* XMPPFramework */,
@@ -2054,6 +2133,9 @@
 		D9F9376D13F44BD3009A3D84 = {
 			isa = PBXGroup;
 			children = (
+				D960F800162A497700535240 /* libc++abi.dylib */,
+				D960F7FE162A497100535240 /* libstdc++.dylib */,
+				D960F7F5162A48E700535240 /* libc++.dylib */,
 				D97BF53A160150CE00DA91F9 /* Default-568h@2x.png */,
 				D9F9378013F44BD3009A3D84 /* Off the Record */,
 				D9D69B03141806150056FB9E /* 3rd Party Frameworks */,
@@ -2203,6 +2285,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				D960F7F2162A479700535240 /* PBXTargetDependency */,
 				D92061E815E2E180003EEF3A /* PBXTargetDependency */,
 			);
 			name = "Off the Record";
@@ -2250,6 +2333,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = D960F7D1162A478E00535240 /* Products */;
+					ProjectRef = D960F7D0162A478E00535240 /* jrtplib.xcodeproj */;
+				},
+				{
 					ProductGroup = D92061C615E2E0D8003EEF3A /* Products */;
 					ProjectRef = D92061C515E2E0D8003EEF3A /* OTRKit.xcodeproj */;
 				},
@@ -2267,6 +2354,55 @@
 			fileType = archive.ar;
 			path = libOTRKit.a;
 			remoteRef = D92061E215E2E0D8003EEF3A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D960F7E4162A478E00535240 /* libjrtp.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libjrtp.dylib;
+			remoteRef = D960F7E3162A478E00535240 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D960F7E6162A478E00535240 /* libjrtp.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libjrtp.a;
+			remoteRef = D960F7E5162A478E00535240 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D960F7E8162A478E00535240 /* example1 */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = example1;
+			remoteRef = D960F7E7162A478E00535240 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D960F7EA162A478E00535240 /* example2 */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = example2;
+			remoteRef = D960F7E9162A478E00535240 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D960F7EC162A478E00535240 /* example3 */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = example3;
+			remoteRef = D960F7EB162A478E00535240 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D960F7EE162A478E00535240 /* example4 */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = example4;
+			remoteRef = D960F7ED162A478E00535240 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D960F7F0162A478E00535240 /* example5 */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = example5;
+			remoteRef = D960F7EF162A478E00535240 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -2575,6 +2711,11 @@
 			isa = PBXTargetDependency;
 			name = OTRKit;
 			targetProxy = D92061E715E2E180003EEF3A /* PBXContainerItemProxy */;
+		};
+		D960F7F2162A479700535240 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "jrtplib-static";
+			targetProxy = D960F7F1162A479700535240 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
