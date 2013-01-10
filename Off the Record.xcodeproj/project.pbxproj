@@ -121,6 +121,7 @@
 		D9B88880169ED60700A84BB5 /* libor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9B88876169ED60700A84BB5 /* libor.a */; };
 		D9B88881169ED60700A84BB5 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9B88877169ED60700A84BB5 /* libssl.a */; };
 		D9B88882169ED60700A84BB5 /* libtor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9B88878169ED60700A84BB5 /* libtor.a */; };
+		D9B88999169ED96F00A84BB5 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = D9B88886169ED96F00A84BB5 /* GCDAsyncSocket.m */; };
 		D9BBCD3B1491F7AB00AF1B9F /* 19-gear.png in Resources */ = {isa = PBXBuildFile; fileRef = D9BBCD3A1491F7AB00AF1B9F /* 19-gear.png */; };
 		D9BBCD3F1491F8B400AF1B9F /* OTRAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9BBCD3D1491F8B400AF1B9F /* OTRAboutViewController.m */; };
 		D9BBCD431491FFC800AF1B9F /* about_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D9BBCD411491FFC800AF1B9F /* about_icon.png */; };
@@ -317,7 +318,6 @@
 		D9CEF0961684247400B236B5 /* RFImageToDataTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CEF0101684247400B236B5 /* RFImageToDataTransformer.m */; };
 		D9CEF0971684247400B236B5 /* XMPPIDTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CEF0121684247400B236B5 /* XMPPIDTracker.m */; };
 		D9CEF0981684247400B236B5 /* XMPPSRVResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CEF0141684247400B236B5 /* XMPPSRVResolver.m */; };
-		D9CEF0991684247400B236B5 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CEF0181684247400B236B5 /* GCDAsyncSocket.m */; };
 		D9CEF09A1684247400B236B5 /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CEF01B1684247400B236B5 /* DDAbstractDatabaseLogger.m */; };
 		D9CEF09B1684247400B236B5 /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CEF01D1684247400B236B5 /* DDASLLogger.m */; };
 		D9CEF09C1684247400B236B5 /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CEF01F1684247400B236B5 /* DDFileLogger.m */; };
@@ -604,6 +604,8 @@
 		D9B88876169ED60700A84BB5 /* libor.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libor.a; path = "Submodules/OnionKit/Submodules/iOS-OnionBrowser/dependencies/lib/libor.a"; sourceTree = "<group>"; };
 		D9B88877169ED60700A84BB5 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "Submodules/OnionKit/Submodules/iOS-OnionBrowser/dependencies/lib/libssl.a"; sourceTree = "<group>"; };
 		D9B88878169ED60700A84BB5 /* libtor.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtor.a; path = "Submodules/OnionKit/Submodules/iOS-OnionBrowser/dependencies/lib/libtor.a"; sourceTree = "<group>"; };
+		D9B88885169ED96F00A84BB5 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
+		D9B88886169ED96F00A84BB5 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
 		D9BBCD3A1491F7AB00AF1B9F /* 19-gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "19-gear.png"; sourceTree = "<group>"; };
 		D9BBCD3C1491F8B400AF1B9F /* OTRAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTRAboutViewController.h; sourceTree = "<group>"; };
 		D9BBCD3D1491F8B400AF1B9F /* OTRAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTRAboutViewController.m; sourceTree = "<group>"; };
@@ -1022,8 +1024,6 @@
 		D9CEF0121684247400B236B5 /* XMPPIDTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPIDTracker.m; sourceTree = "<group>"; };
 		D9CEF0131684247400B236B5 /* XMPPSRVResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPSRVResolver.h; sourceTree = "<group>"; };
 		D9CEF0141684247400B236B5 /* XMPPSRVResolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPSRVResolver.m; sourceTree = "<group>"; };
-		D9CEF0171684247400B236B5 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
-		D9CEF0181684247400B236B5 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
 		D9CEF01A1684247400B236B5 /* DDAbstractDatabaseLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDAbstractDatabaseLogger.h; sourceTree = "<group>"; };
 		D9CEF01B1684247400B236B5 /* DDAbstractDatabaseLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDAbstractDatabaseLogger.m; sourceTree = "<group>"; };
 		D9CEF01C1684247400B236B5 /* DDASLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDASLLogger.h; sourceTree = "<group>"; };
@@ -1373,9 +1373,20 @@
 			name = libs;
 			sourceTree = "<group>";
 		};
+		D9B88883169ED96F00A84BB5 /* CocoaAsyncSocket */ = {
+			isa = PBXGroup;
+			children = (
+				D9B88885169ED96F00A84BB5 /* GCDAsyncSocket.h */,
+				D9B88886169ED96F00A84BB5 /* GCDAsyncSocket.m */,
+			);
+			name = CocoaAsyncSocket;
+			path = ../OnionKit/Submodules/CocoaAsyncSocket/GCD;
+			sourceTree = "<group>";
+		};
 		D9CEED611684234D00B236B5 /* Submodules */ = {
 			isa = PBXGroup;
 			children = (
+				D9B88883169ED96F00A84BB5 /* CocoaAsyncSocket */,
 				D9B452AE169ED02000A61221 /* MagicalRecord */,
 				D9B88852169ED5B700A84BB5 /* OnionKit */,
 				D9CEF0D216842AC700B236B5 /* MWFeedParser */,
@@ -2157,7 +2168,6 @@
 		D9CEF0151684247400B236B5 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				D9CEF0161684247400B236B5 /* CocoaAsyncSocket */,
 				D9CEF0191684247400B236B5 /* CocoaLumberjack */,
 				D9CEF02A1684247400B236B5 /* facebook-ios-sdk */,
 				D9CEF02B1684247400B236B5 /* KissXML */,
@@ -2165,15 +2175,6 @@
 			);
 			name = Vendor;
 			path = Submodules/XMPPFramework/Vendor;
-			sourceTree = "<group>";
-		};
-		D9CEF0161684247400B236B5 /* CocoaAsyncSocket */ = {
-			isa = PBXGroup;
-			children = (
-				D9CEF0171684247400B236B5 /* GCDAsyncSocket.h */,
-				D9CEF0181684247400B236B5 /* GCDAsyncSocket.m */,
-			);
-			path = CocoaAsyncSocket;
 			sourceTree = "<group>";
 		};
 		D9CEF0191684247400B236B5 /* CocoaLumberjack */ = {
@@ -2911,7 +2912,6 @@
 				D9CEF0961684247400B236B5 /* RFImageToDataTransformer.m in Sources */,
 				D9CEF0971684247400B236B5 /* XMPPIDTracker.m in Sources */,
 				D9CEF0981684247400B236B5 /* XMPPSRVResolver.m in Sources */,
-				D9CEF0991684247400B236B5 /* GCDAsyncSocket.m in Sources */,
 				D9CEF09A1684247400B236B5 /* DDAbstractDatabaseLogger.m in Sources */,
 				D9CEF09B1684247400B236B5 /* DDASLLogger.m in Sources */,
 				D9CEF09C1684247400B236B5 /* DDFileLogger.m in Sources */,
@@ -2963,6 +2963,7 @@
 				D9B45301169ED02000A61221 /* MagicalRecord+Setup.m in Sources */,
 				D9B45302169ED02000A61221 /* MagicalRecord+ShorthandSupport.m in Sources */,
 				D9B45303169ED02000A61221 /* MagicalRecord.m in Sources */,
+				D9B88999169ED96F00A84BB5 /* GCDAsyncSocket.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
