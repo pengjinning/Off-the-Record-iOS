@@ -22,3 +22,6 @@
 [submodule "Submodules/LibOrange"]
 	path = Submodules/LibOrange
 	url = git@github.com:ChatSecure/LibOrange.git
+[submodule "Submodules/OnionKit"]
+	path = Submodules/OnionKit
+	url = git@github.com:ChatSecure/OnionKit.git
