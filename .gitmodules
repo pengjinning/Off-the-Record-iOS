@@ -25,3 +25,6 @@
 [submodule "Submodules/OnionKit"]
 	path = Submodules/OnionKit
 	url = git@github.com:ChatSecure/OnionKit.git
+[submodule "Submodules/MagicalRecord"]
+	path = Submodules/MagicalRecord
+	url = https://github.com/ChatSecure/MagicalRecord
