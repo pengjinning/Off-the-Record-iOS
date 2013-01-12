@@ -23,6 +23,11 @@
 		636FE4B9161B7701002B28EF /* OTRXMPPLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 636FE4B8161B7701002B28EF /* OTRXMPPLoginViewController.m */; };
 		636FE4BC161B771E002B28EF /* OTROscarLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 636FE4BB161B771E002B28EF /* OTROscarLoginViewController.m */; };
 		636FE4C0161B7C68002B28EF /* OTRInLineTextEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 636FE4BF161B7C68002B28EF /* OTRInLineTextEditTableViewCell.m */; };
+		63734EC6169F7EDF00F3495F /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 63734EC5169F7BE300F3495F /* GCDAsyncSocket.m */; };
+		63734EC9169F9EE600F3495F /* OnionKitTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63734EC8169F9EE600F3495F /* OnionKitTest.m */; };
+		63734ECC169FA88900F3495F /* torrc in Resources */ = {isa = PBXBuildFile; fileRef = 63734ECB169FA88900F3495F /* torrc */; };
+		63734ECE169FA89300F3495F /* geoip in Resources */ = {isa = PBXBuildFile; fileRef = 63734ECD169FA89300F3495F /* geoip */; };
+		63734ED1169FA97100F3495F /* Settings.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 63734ECF169FA97100F3495F /* Settings.xcdatamodeld */; };
 		639B9A71164F21D900C021A9 /* OTRShareSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 639B9A70164F21D900C021A9 /* OTRShareSetting.m */; };
 		639FDE4716334FA500387666 /* OTRJabberLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 639FDE4616334FA500387666 /* OTRJabberLoginViewController.m */; };
 		63B43C2D166D93D5004A4C54 /* Lock_Locked_Verified.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B43C29166D93D5004A4C54 /* Lock_Locked_Verified.png */; };
@@ -121,7 +126,6 @@
 		D9B88880169ED60700A84BB5 /* libor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9B88876169ED60700A84BB5 /* libor.a */; };
 		D9B88881169ED60700A84BB5 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9B88877169ED60700A84BB5 /* libssl.a */; };
 		D9B88882169ED60700A84BB5 /* libtor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9B88878169ED60700A84BB5 /* libtor.a */; };
-		D9B88999169ED96F00A84BB5 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = D9B88886169ED96F00A84BB5 /* GCDAsyncSocket.m */; };
 		D9BBCD3B1491F7AB00AF1B9F /* 19-gear.png in Resources */ = {isa = PBXBuildFile; fileRef = D9BBCD3A1491F7AB00AF1B9F /* 19-gear.png */; };
 		D9BBCD3F1491F8B400AF1B9F /* OTRAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9BBCD3D1491F8B400AF1B9F /* OTRAboutViewController.m */; };
 		D9BBCD431491FFC800AF1B9F /* about_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D9BBCD411491FFC800AF1B9F /* about_icon.png */; };
@@ -452,6 +456,13 @@
 		636FE4BB161B771E002B28EF /* OTROscarLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTROscarLoginViewController.m; sourceTree = "<group>"; };
 		636FE4BE161B7C68002B28EF /* OTRInLineTextEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTRInLineTextEditTableViewCell.h; sourceTree = "<group>"; };
 		636FE4BF161B7C68002B28EF /* OTRInLineTextEditTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTRInLineTextEditTableViewCell.m; sourceTree = "<group>"; };
+		63734EC4169F7BE300F3495F /* GCDAsyncSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = Submodules/OnionKit/Submodules/CocoaAsyncSocket/GCD/GCDAsyncSocket.h; sourceTree = SOURCE_ROOT; };
+		63734EC5169F7BE300F3495F /* GCDAsyncSocket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = Submodules/OnionKit/Submodules/CocoaAsyncSocket/GCD/GCDAsyncSocket.m; sourceTree = SOURCE_ROOT; };
+		63734EC7169F9EE600F3495F /* OnionKitTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnionKitTest.h; sourceTree = "<group>"; };
+		63734EC8169F9EE600F3495F /* OnionKitTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnionKitTest.m; sourceTree = "<group>"; };
+		63734ECB169FA88900F3495F /* torrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = torrc; path = "Submodules/OnionKit/Submodules/iOS-OnionBrowser/OnionBrowser/torrc"; sourceTree = SOURCE_ROOT; };
+		63734ECD169FA89300F3495F /* geoip */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = geoip; path = "Submodules/OnionKit/Submodules/iOS-OnionBrowser/dependencies/share/geoip"; sourceTree = SOURCE_ROOT; };
+		63734ED0169FA97100F3495F /* Settings.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Settings.xcdatamodel; sourceTree = "<group>"; };
 		639B9A6F164F21D900C021A9 /* OTRShareSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTRShareSetting.h; sourceTree = "<group>"; };
 		639B9A70164F21D900C021A9 /* OTRShareSetting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTRShareSetting.m; sourceTree = "<group>"; };
 		639FDE4516334FA500387666 /* OTRJabberLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTRJabberLoginViewController.h; sourceTree = "<group>"; };
@@ -604,8 +615,6 @@
 		D9B88876169ED60700A84BB5 /* libor.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libor.a; path = "Submodules/OnionKit/Submodules/iOS-OnionBrowser/dependencies/lib/libor.a"; sourceTree = "<group>"; };
 		D9B88877169ED60700A84BB5 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "Submodules/OnionKit/Submodules/iOS-OnionBrowser/dependencies/lib/libssl.a"; sourceTree = "<group>"; };
 		D9B88878169ED60700A84BB5 /* libtor.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtor.a; path = "Submodules/OnionKit/Submodules/iOS-OnionBrowser/dependencies/lib/libtor.a"; sourceTree = "<group>"; };
-		D9B88885169ED96F00A84BB5 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
-		D9B88886169ED96F00A84BB5 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
 		D9BBCD3A1491F7AB00AF1B9F /* 19-gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "19-gear.png"; sourceTree = "<group>"; };
 		D9BBCD3C1491F8B400AF1B9F /* OTRAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTRAboutViewController.h; sourceTree = "<group>"; };
 		D9BBCD3D1491F8B400AF1B9F /* OTRAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTRAboutViewController.m; sourceTree = "<group>"; };
@@ -1181,6 +1190,16 @@
 			name = Login;
 			sourceTree = "<group>";
 		};
+		63734ECA169FA86B00F3495F /* Tor */ = {
+			isa = PBXGroup;
+			children = (
+				63734ECD169FA89300F3495F /* geoip */,
+				63734ECF169FA97100F3495F /* Settings.xcdatamodeld */,
+				63734ECB169FA88900F3495F /* torrc */,
+			);
+			name = Tor;
+			sourceTree = "<group>";
+		};
 		D91DAE8A154740D5009D0B74 /* Detail Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -1376,8 +1395,8 @@
 		D9B88883169ED96F00A84BB5 /* CocoaAsyncSocket */ = {
 			isa = PBXGroup;
 			children = (
-				D9B88885169ED96F00A84BB5 /* GCDAsyncSocket.h */,
-				D9B88886169ED96F00A84BB5 /* GCDAsyncSocket.m */,
+				63734EC4169F7BE300F3495F /* GCDAsyncSocket.h */,
+				63734EC5169F7BE300F3495F /* GCDAsyncSocket.m */,
 			);
 			name = CocoaAsyncSocket;
 			path = ../OnionKit/Submodules/CocoaAsyncSocket/GCD;
@@ -2340,6 +2359,7 @@
 		D9D8D1F61531056300F9E8D3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				63734ECA169FA86B00F3495F /* Tor */,
 				D9D8D20C153107E600F9E8D3 /* Strings.h */,
 				6319F695165EAB1F0063AC93 /* supportedLanguages.plist */,
 				D9D8D1F71531056300F9E8D3 /* InfoPlist.strings */,
@@ -2404,6 +2424,8 @@
 				D9991A4F13F44F9A002D3008 /* OTRChatViewController.m */,
 				D9F9378913F44BD3009A3D84 /* OTRAppDelegate.h */,
 				D9F9378A13F44BD3009A3D84 /* OTRAppDelegate.m */,
+				63734EC7169F9EE600F3495F /* OnionKitTest.h */,
+				63734EC8169F9EE600F3495F /* OnionKitTest.m */,
 				D9FBD71915472FB400126568 /* Settings */,
 				636FE4BD161B7733002B28EF /* Login */,
 				6352DC8615AF9F16007AD0B4 /* OTRNewAccountViewController.h */,
@@ -2681,6 +2703,8 @@
 				D9BE44A9166F330A00A628C7 /* globe.png in Resources */,
 				D9BE44AA166F330A00A628C7 /* globe@2x.png in Resources */,
 				D9CEED8A1684237700B236B5 /* AppiraterLocalizable.strings in Resources */,
+				63734ECC169FA88900F3495F /* torrc in Resources */,
+				63734ECE169FA89300F3495F /* geoip in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2963,7 +2987,9 @@
 				D9B45301169ED02000A61221 /* MagicalRecord+Setup.m in Sources */,
 				D9B45302169ED02000A61221 /* MagicalRecord+ShorthandSupport.m in Sources */,
 				D9B45303169ED02000A61221 /* MagicalRecord.m in Sources */,
-				D9B88999169ED96F00A84BB5 /* GCDAsyncSocket.m in Sources */,
+				63734EC6169F7EDF00F3495F /* GCDAsyncSocket.m in Sources */,
+				63734EC9169F9EE600F3495F /* OnionKitTest.m in Sources */,
+				63734ED1169FA97100F3495F /* Settings.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3103,7 +3129,8 @@
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,
-					"\"$(SRCROOT)/Submodules/OTRKit/**",
+					"\"$(SRCROOT)/Submodules/OTRKit\"/**",
+					"\"$(SRCROOT)/Submodules/OnionKit/OnionKit\"",
 				);
 				INFOPLIST_FILE = "Off the Record/Off the Record-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -3137,7 +3164,8 @@
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,
-					"\"$(SRCROOT)/Submodules/OTRKit/**",
+					"\"$(SRCROOT)/Submodules/OTRKit\"/**",
+					"\"$(SRCROOT)/Submodules/OnionKit/OnionKit\"",
 				);
 				INFOPLIST_FILE = "Off the Record/Off the Record-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -3181,6 +3209,17 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
+		63734ECF169FA97100F3495F /* Settings.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				63734ED0169FA97100F3495F /* Settings.xcdatamodel */,
+			);
+			currentVersion = 63734ED0169FA97100F3495F /* Settings.xcdatamodel */;
+			name = Settings.xcdatamodeld;
+			path = "../../Submodules/OnionKit/Submodules/iOS-OnionBrowser/OnionBrowser/OnionBrowser/Settings.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
 		D9CEEF8A1684247400B236B5 /* XMPPRoom.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (

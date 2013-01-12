@@ -32,6 +32,8 @@
 #import "OTRConstants.h"
 #import "OTRLanguageManager.h"
 
+#import "OnionKitTest.h"
+
 // Log levels: off, error, warn, info, verbose
 #if DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
@@ -56,6 +58,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    OnionKitTest * oKitTest = [[OnionKitTest alloc] init];
 #ifdef CRITTERCISM_ENABLED
     if([OTRSettingsManager boolForOTRSettingKey:kOTRSettingKeyCrittercismOptIn])
     {
