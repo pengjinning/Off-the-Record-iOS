@@ -28,3 +28,6 @@
 [submodule "Submodules/MagicalRecord"]
 	path = Submodules/MagicalRecord
 	url = https://github.com/ChatSecure/MagicalRecord
+[submodule "Submodules/Crittercism-SDK"]
+	path = Submodules/Crittercism-SDK
+	url = git@github.com:ChatSecure/Crittercism-SDK.git

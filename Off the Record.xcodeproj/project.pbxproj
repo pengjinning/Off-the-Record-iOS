@@ -23,6 +23,8 @@
 		636FE4B9161B7701002B28EF /* OTRXMPPLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 636FE4B8161B7701002B28EF /* OTRXMPPLoginViewController.m */; };
 		636FE4BC161B771E002B28EF /* OTROscarLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 636FE4BB161B771E002B28EF /* OTROscarLoginViewController.m */; };
 		636FE4C0161B7C68002B28EF /* OTRInLineTextEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 636FE4BF161B7C68002B28EF /* OTRInLineTextEditTableViewCell.m */; };
+		637174FF16A4C0E30033E072 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 637174FB16A4C0E30033E072 /* .gitignore */; };
+		6371750016A4C0E30033E072 /* libCrittercism_v3_4_6.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 637174FE16A4C0E30033E072 /* libCrittercism_v3_4_6.a */; };
 		63734EC6169F7EDF00F3495F /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 63734EC5169F7BE300F3495F /* GCDAsyncSocket.m */; };
 		63734EC9169F9EE600F3495F /* OnionKitTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63734EC8169F9EE600F3495F /* OnionKitTest.m */; };
 		63734ECC169FA88900F3495F /* torrc in Resources */ = {isa = PBXBuildFile; fileRef = 63734ECB169FA88900F3495F /* torrc */; };
@@ -348,7 +350,6 @@
 		D9CEF0D116842A5B00B236B5 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CEF0C516842A5B00B236B5 /* SBJsonWriter.m */; };
 		D9CEF0E916842AC700B236B5 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CEF0D616842AC700B236B5 /* GTMNSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		D9CEF0EF16842AC700B236B5 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CEF0E316842AC700B236B5 /* NSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		D9CEF0F216842E5600B236B5 /* libCrittercism_v3_4_6.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9CEED901684238D00B236B5 /* libCrittercism_v3_4_6.a */; };
 		D9CEF0F316842E6100B236B5 /* libidn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9CEF03B1684247400B236B5 /* libidn.a */; };
 		D9D69AA91417FDBA0056FB9E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9D69AA81417FDBA0056FB9E /* CFNetwork.framework */; };
 		D9D69ABC1417FDF90056FB9E /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D9D69ABB1417FDF90056FB9E /* libxml2.dylib */; };
@@ -456,6 +457,10 @@
 		636FE4BB161B771E002B28EF /* OTROscarLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTROscarLoginViewController.m; sourceTree = "<group>"; };
 		636FE4BE161B7C68002B28EF /* OTRInLineTextEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTRInLineTextEditTableViewCell.h; sourceTree = "<group>"; };
 		636FE4BF161B7C68002B28EF /* OTRInLineTextEditTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTRInLineTextEditTableViewCell.m; sourceTree = "<group>"; };
+		637174FB16A4C0E30033E072 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		637174FC16A4C0E30033E072 /* Crittercism.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Crittercism.h; sourceTree = "<group>"; };
+		637174FD16A4C0E30033E072 /* CrittercismDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrittercismDelegate.h; sourceTree = "<group>"; };
+		637174FE16A4C0E30033E072 /* libCrittercism_v3_4_6.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCrittercism_v3_4_6.a; sourceTree = "<group>"; };
 		63734EC4169F7BE300F3495F /* GCDAsyncSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = Submodules/OnionKit/Submodules/CocoaAsyncSocket/GCD/GCDAsyncSocket.h; sourceTree = SOURCE_ROOT; };
 		63734EC5169F7BE300F3495F /* GCDAsyncSocket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = Submodules/OnionKit/Submodules/CocoaAsyncSocket/GCD/GCDAsyncSocket.m; sourceTree = SOURCE_ROOT; };
 		63734EC7169F9EE600F3495F /* OnionKitTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnionKitTest.h; sourceTree = "<group>"; };
@@ -663,9 +668,6 @@
 		D9CEED851684237700B236B5 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
 		D9CEED861684237700B236B5 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AppiraterLocalizable.strings"; sourceTree = "<group>"; };
 		D9CEED871684237700B236B5 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/AppiraterLocalizable.strings"; sourceTree = "<group>"; };
-		D9CEED8E1684238D00B236B5 /* Crittercism.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Crittercism.h; sourceTree = "<group>"; };
-		D9CEED8F1684238D00B236B5 /* CrittercismDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrittercismDelegate.h; sourceTree = "<group>"; };
-		D9CEED901684238D00B236B5 /* libCrittercism_v3_4_6.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCrittercism_v3_4_6.a; sourceTree = "<group>"; };
 		D9CEED96168423CA00B236B5 /* AIMBArtDownloadReply.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIMBArtDownloadReply.h; sourceTree = "<group>"; };
 		D9CEED97168423CA00B236B5 /* AIMBArtDownloadReply.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIMBArtDownloadReply.m; sourceTree = "<group>"; };
 		D9CEED98168423CA00B236B5 /* AIMBArtHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIMBArtHandler.h; sourceTree = "<group>"; };
@@ -1151,7 +1153,6 @@
 				D90B80AC13FC719B006EFF3D /* CoreGraphics.framework in Frameworks */,
 				D9F9377D13F44BD3009A3D84 /* UIKit.framework in Frameworks */,
 				D9F9377F13F44BD3009A3D84 /* Foundation.framework in Frameworks */,
-				D9CEF0F216842E5600B236B5 /* libCrittercism_v3_4_6.a in Frameworks */,
 				D9CEF0F316842E6100B236B5 /* libidn.a in Frameworks */,
 				D9B88879169ED60700A84BB5 /* libcrypto.a in Frameworks */,
 				D9B8887A169ED60700A84BB5 /* libevent_core.a in Frameworks */,
@@ -1163,6 +1164,7 @@
 				D9B88880169ED60700A84BB5 /* libor.a in Frameworks */,
 				D9B88881169ED60700A84BB5 /* libssl.a in Frameworks */,
 				D9B88882169ED60700A84BB5 /* libtor.a in Frameworks */,
+				6371750016A4C0E30033E072 /* libCrittercism_v3_4_6.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1188,6 +1190,18 @@
 				636FE4BF161B7C68002B28EF /* OTRInLineTextEditTableViewCell.m */,
 			);
 			name = Login;
+			sourceTree = "<group>";
+		};
+		637174FA16A4C0E30033E072 /* Crittercism-SDK */ = {
+			isa = PBXGroup;
+			children = (
+				637174FB16A4C0E30033E072 /* .gitignore */,
+				637174FC16A4C0E30033E072 /* Crittercism.h */,
+				637174FD16A4C0E30033E072 /* CrittercismDelegate.h */,
+				637174FE16A4C0E30033E072 /* libCrittercism_v3_4_6.a */,
+			);
+			name = "Crittercism-SDK";
+			path = "Submodules/Crittercism-SDK";
 			sourceTree = "<group>";
 		};
 		63734ECA169FA86B00F3495F /* Tor */ = {
@@ -1414,7 +1428,7 @@
 				D9CEEF031684242A00B236B5 /* SSKeychain */,
 				D9CEEEC21684240900B236B5 /* MBProgressHUD */,
 				D9CEED95168423CA00B236B5 /* LibOrange */,
-				D9CEED8C1684238D00B236B5 /* Crittercism */,
+				637174FA16A4C0E30033E072 /* Crittercism-SDK */,
 				D9CEED6B1684237700B236B5 /* Appirater */,
 				D9CEED621684235B00B236B5 /* OTRKit.xcodeproj */,
 			);
@@ -1439,17 +1453,6 @@
 			);
 			name = Appirater;
 			path = Submodules/Appirater;
-			sourceTree = "<group>";
-		};
-		D9CEED8C1684238D00B236B5 /* Crittercism */ = {
-			isa = PBXGroup;
-			children = (
-				D9CEED8E1684238D00B236B5 /* Crittercism.h */,
-				D9CEED8F1684238D00B236B5 /* CrittercismDelegate.h */,
-				D9CEED901684238D00B236B5 /* libCrittercism_v3_4_6.a */,
-			);
-			name = Crittercism;
-			path = Submodules/Crittercism;
 			sourceTree = "<group>";
 		};
 		D9CEED95168423CA00B236B5 /* LibOrange */ = {
@@ -2705,6 +2708,7 @@
 				D9CEED8A1684237700B236B5 /* AppiraterLocalizable.strings in Resources */,
 				63734ECC169FA88900F3495F /* torrc in Resources */,
 				63734ECE169FA89300F3495F /* geoip in Resources */,
+				637174FF16A4C0E30033E072 /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3140,6 +3144,7 @@
 					"\"$(SRCROOT)/Submodules/XMPPFramework/Vendor/libidn\"",
 					"\"$(SDKROOT)/usr/lib/system\"",
 					"\"$(SRCROOT)/Submodules/OnionKit/Submodules/iOS-OnionBrowser/dependencies/lib\"",
+					"\"$(SRCROOT)/Submodules/Crittercism-SDK\"",
 				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = ChatSecure;
@@ -3175,6 +3180,7 @@
 					"\"$(SRCROOT)/Submodules/XMPPFramework/Vendor/libidn\"",
 					"\"$(SDKROOT)/usr/lib/system\"",
 					"\"$(SRCROOT)/Submodules/OnionKit/Submodules/iOS-OnionBrowser/dependencies/lib\"",
+					"\"$(SRCROOT)/Submodules/Crittercism-SDK\"",
 				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = ChatSecure;
