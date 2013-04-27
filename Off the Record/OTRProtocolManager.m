@@ -21,7 +21,7 @@
 //  along with ChatSecure.  If not, see <http://www.gnu.org/licenses/>.
 
 #import "OTRProtocolManager.h"
-#import "OTRBuddy.h"
+#import "OTRManagedBuddy.h"
 #import "OTRConstants.h"
 
 static OTRProtocolManager *sharedManager = nil;
@@ -29,7 +29,6 @@ static OTRProtocolManager *sharedManager = nil;
 @implementation OTRProtocolManager
 
 @synthesize encryptionManager;
-@synthesize buddyList;
 @synthesize settingsManager;
 @synthesize accountsManager;
 @synthesize protocolManagers;
@@ -37,13 +36,11 @@ static OTRProtocolManager *sharedManager = nil;
 - (void) dealloc 
 {
     self.encryptionManager = nil;
-    self.buddyList = nil;
     self.settingsManager = nil;
     self.accountsManager = nil;
     self.protocolManagers = nil;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kOTRSendMessage object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kOTRBuddyListUpdate object:nil];
 }
 
 -(id)init
@@ -54,7 +51,6 @@ static OTRProtocolManager *sharedManager = nil;
         self.accountsManager = [[OTRAccountsManager alloc] init];
         self.encryptionManager = [[OTREncryptionManager alloc] init];
         self.settingsManager = [[OTRSettingsManager alloc] init];
-        self.buddyList = [[OTRBuddyList alloc] init];
         self.protocolManagers = [[NSMutableDictionary alloc] init];
 
         [[NSNotificationCenter defaultCenter]
@@ -63,11 +59,6 @@ static OTRProtocolManager *sharedManager = nil;
          name:kOTRSendMessage
          object:nil ];
         
-        [[NSNotificationCenter defaultCenter]
-         addObserver:self
-         selector:@selector(buddyListUpdate)
-         name:kOTRBuddyListUpdate
-         object:nil ];
     }
     return self;
 }
@@ -102,34 +93,19 @@ static OTRProtocolManager *sharedManager = nil;
 -(void)sendMessage:(NSNotification *)notification
 {
     NSObject *messageObject = [notification object];
-    if ([messageObject isKindOfClass:[OTRMessage class]]) {
-        OTRMessage *message = (OTRMessage *)messageObject;
+    if ([messageObject isKindOfClass:[OTRManagedMessage class]]) {
+        OTRManagedMessage *message = (OTRManagedMessage *)messageObject;
         [message send];
-
-    }
-        
-    //NSLog(@"send message (%@): %@", protocol, message.message);
+    }        
 }
 
-
--(void)buddyListUpdate
+-(OTRManagedBuddy *)buddyForUserName:(NSString *)buddyUserName accountName:(NSString *)accountName protocol:(NSString *)protocol
 {
-    //NSLog(@"Protocols: %@",[protocolManagers allKeys]);
-    for (id key in protocolManagers) {
-        [self.buddyList updateBuddies:[[protocolManagers objectForKey:key] buddyList]];
-    }
-    
-    
+    OTRManagedAccount * account = [self.accountsManager accountForProtocol:protocol accountName:accountName];
+    return [OTRManagedBuddy fetchOrCreateWithName:buddyUserName account:account];
 }
 
--(OTRBuddy *)buddyForUserName:(NSString *)buddyUserName accountName:(NSString *)accountName protocol:(NSString *)protocol
-{
-    return [self.buddyList getBuddyForUserName:buddyUserName accountUniqueIdentifier:[self.accountsManager accountForProtocol:protocol accountName:accountName].uniqueIdentifier];
-    
-    
-}
-
-- (id <OTRProtocol>)protocolForAccount:(OTRAccount *)account
+- (id <OTRProtocol>)protocolForAccount:(OTRManagedAccount *)account
 {
     id <OTRProtocol> protocol = [protocolManagers objectForKey:account.uniqueIdentifier];
     if(!protocol)
@@ -139,6 +115,16 @@ static OTRProtocolManager *sharedManager = nil;
         [protocolManagers setObject:protocol forKey:account.uniqueIdentifier];
     }
     return protocol;
+}
+
+-(BOOL)isAccountConnected:(OTRManagedAccount *)account;
+{
+    id <OTRProtocol> protocol = [protocolManagers objectForKey:account.uniqueIdentifier];
+    if (protocol) {
+        return [protocol isConnected];
+    }
+    return NO;
+    
 }
 
 @end

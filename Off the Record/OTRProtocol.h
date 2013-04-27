@@ -20,22 +20,24 @@
 //  You should have received a copy of the GNU General Public License
 //  along with ChatSecure.  If not, see <http://www.gnu.org/licenses/>.
 
-#import "OTRAccount.h"
-
-@class OTRMessage, OTRBuddy;
+@class OTRManagedMessage, OTRManagedBuddy, OTRManagedAccount;
 
 @protocol OTRProtocol <NSObject>
 
-@property (nonatomic, strong) OTRAccount * account;
-@property (nonatomic, strong) NSMutableDictionary * protocolBuddyList;
+@property (nonatomic, strong) OTRManagedAccount * account;
 
-- (void) sendMessage:(OTRMessage*)message;
-- (NSArray*) buddyList;
+- (void) sendMessage:(OTRManagedMessage*)message;
 - (void) connectWithPassword:(NSString *)password;
 - (void) disconnect;
+- (void) addBuddy:(OTRManagedBuddy *)newBuddy;
+- (BOOL) isConnected;
 
-@optional
+-(void) removeBuddies:(NSArray *)buddies;
+-(void) blockBuddies:(NSArray *)buddies;
 
-- (void)sendChatState:(int)chatState withBuddy:(OTRBuddy *)buddy;
+@end
 
+@protocol OTRXMPPProtocol <OTRProtocol>
+- (void)sendChatState:(int)chatState withBuddy:(OTRManagedBuddy *)buddy;
+- (void) setDisplayName:(NSString *) newDisplayName forBuddy:(OTRManagedBuddy *)buddy;
 @end

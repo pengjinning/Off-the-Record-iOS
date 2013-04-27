@@ -21,17 +21,16 @@
 //  along with ChatSecure.  If not, see <http://www.gnu.org/licenses/>.
 
 #import <Foundation/Foundation.h>
-#import "OTRAccount.h"
+#import "OTRManagedAccount.h"
 
 @interface OTRAccountsManager : NSObject
 
-@property (nonatomic, retain) NSMutableDictionary *accountsDictionary;
-@property (nonatomic, retain) NSMutableDictionary *reverseLookupDictionary;
-@property (nonatomic, retain) NSArray *accountsArray;
+- (void) addAccount:(OTRManagedAccount*)account;
+- (void) removeAccount:(OTRManagedAccount*)account;
 
-- (void) addAccount:(OTRAccount*)account;
-- (void) removeAccount:(OTRAccount*)account;
+- (OTRManagedAccount *) accountForProtocol:(NSString *)protocol accountName: (NSString *) accountName;
 
-- (OTRAccount *) accountForProtocol:(NSString *)protocol accountName: (NSString *) accountName;
++ (NSUInteger)numberOfAccountsLoggedIn;
++ (NSArray *)allLoggedInAccounts;
 
 @end

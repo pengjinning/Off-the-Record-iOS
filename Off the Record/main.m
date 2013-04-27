@@ -1,4 +1,4 @@
-//
+ //
 //  main.m
 //  Off the Record
 //
@@ -23,6 +23,7 @@
 #import <UIKit/UIKit.h>
 
 #import "OTRAppDelegate.h"
+#import "OTRLanguageManager.h"
 
 int main(int argc, char *argv[])
 {

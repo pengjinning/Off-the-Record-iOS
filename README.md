@@ -10,20 +10,22 @@ Cost
 This project is \***100% free**\* because it is important that all people around the world have unrestricted access to privacy tools.
 However, developing and supporting this project is hard work and costs real money. Please help support the development of this project!
 
-[![donation](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XRBHJ9AX5VWNA)
+[![donation](https://chatsecure.org/static/images/paypal_donate.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XRBHJ9AX5VWNA)
 
 
 Localization
 =========
+
+![transifex localization](https://www.transifex.com/projects/p/chatsecure/resource/strings/chart/image_png)
 
 If you would like to contribute/improve a translation:
 
  1. Visit our [Transifex project page](https://www.transifex.net/projects/p/chatsecure/) and make an account if you don't have one already.
  2. Go to the resources subsites [AppStore.strings](https://www.transifex.net/projects/p/chatsecure/resource/appstorestrings/) & [Localizable.strings](https://www.transifex.net/projects/p/chatsecure/resource/strings/) to add a new language or improve an existing translation. 
  3. [Open an issue on Github](https://github.com/chrisballinger/Off-the-Record-iOS/issues) notifying us of your translation.
- 
 
- 
+
+
 Compatibility
 =========
 
@@ -103,9 +105,13 @@ terms of a separate license:
 * [MBProgressHUD](https://github.com/jdg/MBProgressHUD) - a nice looking progress HUD
 * [MWFeedParser](https://github.com/mwaterfall/MWFeedParser) - Methods for escaping HTML strings
 * [Crittercism](http://www.crittercism.com/) - crash reports, only submitted via opt-in
-* [SFHFKeychainUtils](https://github.com/ldandersen/scifihifi-iphone/tree/master/security/) - Utilities to store passwords securely in the iOS keychain
+* [SSKeychain](https://github.com/soffes/sskeychain) - Utilities to store passwords securely in the iOS keychain
 * [Appirater](https://github.com/arashpayan/appirater) - nags people to give reviews
-
+* [MagicalRecord](https://github.com/magicalpanda/MagicalRecord) - Core Data convenience methods
+* [encrypted-core-data](https://github.com/project-imas/encrypted-core-data) - Core Data + SQLCipher
+* [UserVoice](http://www.uservoice.com) - in-app support forum
+* [mogenerator](https://github.com/rentzsch/mogenerator) - creates class files for core data model
+* [DAKeyboardControl](https://github.com/danielamitay/DAKeyboardControl) - support for swiping down keyboard in chat view
 
 Acknowledgements
 =========
@@ -114,7 +120,9 @@ Acknowledgements
 * [Glyphish](http://glyphish.com/) - icons used on the tab bar.
 * [Adium](http://adium.im/) - lock/unlock icon used in chat window, status gems.
 * [Sergio Sánchez López](http://www.iconfinder.com/icondetails/7043/128/aim_icon) - AIM protocol icon.
+* [Mateo Zlatar](http://thenounproject.com/mateozlatar/#) - [World Icon](http://thenounproject.com/noun/world/#icon-No6502)
 * [Goxxy](http://rocketdock.com/addon/icons/3462) - Google Talk icon.
+* [AcaniChat](https://github.com/acani/AcaniChat) - help on setting up chat view input box
 * [Localizations](https://www.transifex.com/projects/p/chatsecure/)
 	* [Jiajuan Lin](http://www.personal.psu.edu/jwl5262/blogs/lin_portfolio/) (Chinese)
 	* [Jan-Christoph Borchardt](http://jancborchardt.net/) (German)
