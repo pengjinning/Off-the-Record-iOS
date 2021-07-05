@@ -1,46 +1,42 @@
-
-[submodule "Submodules/Appirater"]
-	path = Submodules/Appirater
-	url = git://github.com/arashpayan/appirater.git
-[submodule "Submodules/SSKeychain"]
-	path = Submodules/SSKeychain
-	url = git://github.com/soffes/sskeychain.git
-[submodule "Submodules/MBProgressHUD"]
-	path = Submodules/MBProgressHUD
-	url = git://github.com/jdg/MBProgressHUD.git
-[submodule "Submodules/MWFeedParser"]
-	path = Submodules/MWFeedParser
-	url = git@github.com:ChatSecure/MWFeedParser.git
 [submodule "Submodules/OTRKit"]
 	path = Submodules/OTRKit
 	url = git@github.com:ChatSecure/OTRKit.git
-[submodule "Submodules/Crittercism"]
-	path = Submodules/Crittercism
-	url = git@github.com:ChatSecure/Crittercism-SDK.git
-[submodule "Submodules/LibOrange"]
-	path = Submodules/LibOrange
-	url = git@github.com:ChatSecure/LibOrange.git
 [submodule "Submodules/XMPPFramework"]
 	path = Submodules/XMPPFramework
 	url = git@github.com:ChatSecure/XMPPFramework.git
-[submodule "Submodules/UserVoice"]
-	path = Submodules/UserVoice
-	url = git@github.com:ChatSecure/uservoice-iphone-sdk.git
-[submodule "Submodules/encrypted-core-data"]
-	path = Submodules/encrypted-core-data
-	url = git@github.com:ChatSecure/encrypted-core-data.git
-[submodule "Submodules/MagicalRecord"]
-	path = Submodules/MagicalRecord
-	url = git@github.com:ChatSecure/MagicalRecord.git
-[submodule "Submodules/DAKeyboardControl"]
-	path = Submodules/DAKeyboardControl
-	url = git@github.com:danielamitay/DAKeyboardControl.git
-[submodule "Submodules/TTTAttributedLabel"]
-	path = Submodules/TTTAttributedLabel
-	url = git@github.com:ChatSecure/TTTAttributedLabel.git
-[submodule "Submodules/googleChromeOpenInChrome"]
-	path = Submodules/googleChromeOpenInChrome
-	url = git@github.com:ChatSecure/OpenInChrome.git
-[submodule "Submodules/iOS-Screenshot-Automater"]
-	path = Submodules/iOS-Screenshot-Automater
-	url = git@github.com:ChatSecure/iOS-Screenshot-Automator.git
+[submodule "Submodules/ChatSecure-Metadata"]
+	path = Submodules/ChatSecure-Metadata
+	url = git@github.com:ChatSecure/ChatSecure-Metadata.git
+[submodule "Submodules/ProxyKit"]
+	path = Submodules/ProxyKit
+	url = git@github.com:chrisballinger/ProxyKit.git
+[submodule "Submodules/CPAProxy"]
+	path = Submodules/CPAProxy
+	url = git@github.com:ursachec/CPAProxy.git
+[submodule "Submodules/IOCipher"]
+	path = Submodules/IOCipher
+	url = git@github.com:ChatSecure/IOCipher-ObjC.git
+[submodule "Submodules/xmpp-server-list"]
+	path = Submodules/xmpp-server-list
+	url = git@github.com:ChatSecure/xmpp-server-list.git
+[submodule "Submodules/ChatSecure-Push-iOS"]
+	path = Submodules/ChatSecure-Push-iOS
+	url = git@github.com:ChatSecure/ChatSecure-Push-iOS.git
+[submodule "Submodules/JSQMessagesViewController"]
+	path = Submodules/JSQMessagesViewController
+	url = git@github.com:ChatSecure/JSQMessagesViewController.git
+[submodule "Submodules/SignalProtocol-ObjC"]
+	path = Submodules/SignalProtocol-ObjC
+	url = git@github.com:ChatSecure/SignalProtocol-ObjC.git
+[submodule "Submodules/LumberjackConsole"]
+	path = Submodules/LumberjackConsole
+	url = git@github.com:ChatSecure/LumberjackConsole.git
+[submodule "Submodules/YapDatabase"]
+	path = Submodules/YapDatabase
+	url = git@github.com:ChatSecure/YapDatabase.git
+[submodule "Submodules/YapTaskQueue"]
+	path = Submodules/YapTaskQueue
+	url = git@github.com:ChatSecure/YapTaskQueue.git
+[submodule "Submodules/libsqlfs"]
+	path = Submodules/libsqlfs
+	url = git@github.com:ChatSecure/libsqlfs.git
